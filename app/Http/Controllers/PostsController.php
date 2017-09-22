@@ -68,18 +68,23 @@ class PostsController extends Controller
         return view('posts.resultview', compact('result1'));
     }
 
-    public function segmentfile(){
-        if(!empty($_FILES['uploader']['name'])){
+    public function segmentfile(request $textfile){
+        $this->validate(request(), [
+            'textfile' => 'required'
+        ]);
+        $time_start = microtime(true);
+
+        if(!empty($_FILES['textfile']['name'])){
             $result = array();
             $file = request()->allFiles();
             $segment = new Segment();
             $text_to_segment = "";
-            for($i=0; $i<count($_FILES['uploader']['name']); $i++) {
+            for($i=0; $i<count($_FILES['textfile']['name']); $i++) {
                 $textarray = " ";
                 $content = " ";
-                $shortname = $_FILES['uploader']['name'][$i];
+                $shortname = $_FILES['textfile']['name'][$i];
                 //echo $shortname."<br>";
-                $content = $file['uploader'][$i]->openFile('r');
+                $content = $file['textfile'][$i]->openFile('r');
                 foreach ($content as $linenum => $line) {
                     //echo $line;
                     $textarray = $textarray . $line;
@@ -87,11 +92,56 @@ class PostsController extends Controller
                 $text_to_segment = trim($textarray);
                 $result[$i][0] = $shortname;
                 $result[$i][1] = $segment->get_segment_array($text_to_segment);
+                $result[$i][2] = array_count_values($result[$i][1]);
+                $result[$i][3] = array_count_values(array_unique($result[$i][1]));
+                arsort($result[$i][2]);
             }
+
+            $df = $this->df($result);
+
+            $tfidf = $this->tfidf($result,$df);
+
+            $time_end = microtime(true);
+            $time = $time_end - $time_start;
+            //echo '<br/><b>ประมวลผลใน: </b> '.round($time,4).' วินาที';
         //print_r($result);
         //dd($result);
-        return view('posts.resultviewfile', compact('result') );
+        //return view('posts.resultviewfile',['result' => $result, 'df' => $df]);
         }
+    }
+
+    // ใช้คำนวณหา Document Frequency.
+    private function df($docArray){
+
+        //print_r($docArray);
+        $dfword = array();
+        foreach ($docArray as $docIndex){
+            //echo $docIndex[0].'<br>';
+            foreach ($docIndex[3] as $docValue => $aa){
+                //echo $docValue.' : '.$aa.'<br>';
+                array_push($dfword,$docValue);
+            }
+        }
+        $dfwordcount = array_count_values($dfword);
+        return $dfwordcount;
+    }
+
+    // ใช้คำนวณหา Term Frequency Inverse Document Frequency.
+    private function tfidf($tf,$idf){
+
+        foreach ($tf as $tfdoc){
+            echo $tfdoc[0]."<br>";
+            foreach ($tfdoc[2] as $tfword => $tfvalue){
+                foreach ($idf as $idfword => $idfvalue){
+                    if ($tfword==$idfword){
+                        $tfidfvalue = $tfvalue*log(count($tf)/$idfvalue,10);
+                        echo "TFIDF OF ".$tfword ." = ".$tfidfvalue."<br>";
+                    }
+                }
+            }
+        }
+
+
     }
 
 

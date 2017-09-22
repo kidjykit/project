@@ -9,7 +9,7 @@
 
   <div class="form-group">
     <label for="input">Input:</label><br>
-      <input type="file" name="uploader[]" id="uploader" multiple="multiple"/>
+      <input type="file" name="textfile[]" id="uploader" multiple="multiple"/>
   </div>
   <div class="form-group">
   <button type="submit" class="btn btn-default">Process</button>

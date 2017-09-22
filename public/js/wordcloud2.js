@@ -1,6 +1,3 @@
-/**
- * Created by kidjykit on 5/6/2017 AD.
- */
 /*!
  * wordcloud2.js
  * http://timdream.org/wordcloud2.js/
@@ -99,6 +96,9 @@ if (!window.clearImmediate) {
         }
 
         var ctx = canvas.getContext('2d');
+        if (!ctx) {
+            return false;
+        }
         if (!ctx.getImageData) {
             return false;
         }
@@ -483,9 +483,10 @@ if (!window.clearImmediate) {
             }
 
             if (rotationSteps > 0) {
+                // Min rotation + zero or more steps * span of one step
                 return minRotation +
-                    (1 / Math.floor((Math.random() * rotationSteps) + 1)) *
-                    rotationRange;
+                    Math.floor(Math.random() * rotationSteps) *
+                    rotationRange / (rotationSteps - 1);
             }
             else {
                 return minRotation + Math.random() * rotationRange;

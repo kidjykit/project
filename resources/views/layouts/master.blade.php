@@ -8,6 +8,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
+
     <title>Process</title>
 
     <!-- Bootstrap core CSS -->
@@ -16,6 +17,9 @@
 
     <!-- Custom styles for this template -->
     <link href="/css/blog.css" rel="stylesheet">
+
+    {{--Load jQuery--}}
+    <script type="text/javascript" src="{!! asset('js/jquery-1.12.4.js') !!}"></script>
 
   </head>
 
