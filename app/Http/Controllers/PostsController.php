@@ -101,12 +101,12 @@ class PostsController extends Controller
 
             $tfidf = $this->tfidf($result,$df);
 
-            $time_end = microtime(true);
-            $time = $time_end - $time_start;
-            //echo '<br/><b>ประมวลผลใน: </b> '.round($time,4).' วินาที';
-        //print_r($result);
-        //dd($result);
-        //return view('posts.resultviewfile',['result' => $result, 'df' => $df]);
+//            $time_end = microtime(true);
+//            $time = $time_end - $time_start;
+//            echo '<br/><b>ประมวลผลใน: </b> '.round($time,4).' วินาที';
+//        print_r($result);
+//        dd($result);
+        return view('posts.resultviewfile',['result' => $result, 'df' => $df, 'tfidf' => $tfidf]);
         }
     }
 
@@ -128,23 +128,27 @@ class PostsController extends Controller
 
     // ใช้คำนวณหา Term Frequency Inverse Document Frequency.
     private function tfidf($tf,$idf){
-
+        $tfidfword = array();
         foreach ($tf as $tfdoc){
-            echo $tfdoc[0]."<br>";
+            //$tfidfword[$tfdoc[0]][] = $tfdoc[0];
+            //echo $tfidfword[0]."<br>";  //File Name.
             foreach ($tfdoc[2] as $tfword => $tfvalue){
                 foreach ($idf as $idfword => $idfvalue){
                     if ($tfword==$idfword){
                         $tfidfvalue = $tfvalue*log(count($tf)/$idfvalue,10);
-                        echo "TFIDF OF ".$tfword ." = ".$tfidfvalue."<br>";
+                        //  $tfdoc[0] >>> File Name.
+                        //  $tfword   >>> Word.
+                        //  $tfidfvalue >>> TFIDF of Word.
+                        $tfidfword[$tfdoc[0]][$tfword] = $tfidfvalue;
+//                        $tfidfword[$tfdoc[0]][1] = $tfidfvalue;
+                        //echo "TFIDF OF ".$tfword ." = ".$tfidfvalue."<br>";
                     }
                 }
             }
         }
-
-
+        return $tfidfword;
+        //dd($tfidfword);
     }
-
-
 
     public function segmentapi(){
       //dd($_POST);

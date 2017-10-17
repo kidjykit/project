@@ -1,7 +1,17 @@
 <div class="blog-masthead">
       <div class="container">
+          <script>
+              $(function() {
+                  if ((location.pathname.split("/")[1]) !== ""){
+                      $('nav a[href^="/' + location.pathname.split("/")[1] + '"]').addClass('active');
+                  }
+                  else {
+                      $('nav a[href^="/text"]').addClass('active');
+                  }
+              });
+          </script>
         <nav class="nav blog-nav">
-          <a class="nav-link active" href="/text">Home</a>
+          <a class="nav-link" href="/text">Home</a>
           <a class="nav-link" href="/file">File</a>
           <a class="nav-link ml-auto" href="#"></a>
 
