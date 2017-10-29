@@ -2,7 +2,7 @@
 
 @section ('content')
 	<div class="col-sm-8 blog-main">
-	<h1>Thai Text Lexiconization and Visualization</h1>
+	<h1>Thai Text Visualization</h1>
 
 	<form method="POST" action="/posts/showfile" enctype="multipart/form-data">
 		{{ csrf_field() }}
@@ -12,7 +12,7 @@
       <input type="file" name="textfile[]" id="uploader" multiple="multiple"/>
   </div>
   <div class="form-group">
-  <button type="submit" class="btn btn-default">Process</button>
+  <button type="submit" class="btn btn-primary">Process</button>
   </div>
 
 	@include ('layouts.errors')

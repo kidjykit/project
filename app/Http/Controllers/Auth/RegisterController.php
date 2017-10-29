@@ -54,6 +54,7 @@ class RegisterController extends Controller
         ]);
     }
 
+    //Create API KEY//
     private function generateRandomString($length = 10) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);

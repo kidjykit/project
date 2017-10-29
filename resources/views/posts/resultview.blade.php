@@ -6,26 +6,20 @@
 	<h1>Process text</h1>
 		<select id="test">
 			<option value="0">select process</option>
-			<option value="1">Word frequency</option>
+			<option value="1" selected>Word frequency</option>
 			<option value="2">Document frequency</option>
 			<option value="3">Term frequency</option>
 			<option value="4">TF-IDF</option>
 		</select>
 
         <div id="canvas-container"></div>
-
-		{{--<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">--}}
-		{{--<canvas id="canvas_cloud" width="800" height="400"></canvas>--}}
-		{{--<script type="text/javascript" src="{!! asset('js/wordcloud2.js') !!}"></script>--}}
-
-		{{--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>--}}
-		{{--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>--}}
 		<script>
 
             $( document ).ready(function() {
                 // Handler for .ready() called.
                 $('#test').change(function() {
 					if($('#test').val() == 1) {
+                        $('#canvas-container').empty();
 						//$('#canvas-container').html($(this).val());
                         $('#canvas-container').append('<canvas id="canvas_cloud" class="canvas" width="1024" height="640"></canvas>');
                         $('#canvas-container').append('<div id="box" class="tooltipme" hidden></div>');
@@ -76,6 +70,7 @@
 
                         }
                     else if($('#test').val() == 2) {
+                        $('#canvas-container').empty();
                         //$('#canvas-container').html($(this).val());
                         $('#canvas-container').append('<canvas id="canvas_cloud" class="canvas" width="1024" height="640"></canvas>');
                         $('#canvas-container').append('<div id="box" class="tooltipme" hidden></div>');
@@ -126,6 +121,7 @@
 
                     }
                     else if($('#test').val() == 3) {
+                        $('#canvas-container').empty();
                         //$('#canvas-container').html($(this).val());
                         $('#canvas-container').append('<canvas id="canvas_cloud" class="canvas" width="1024" height="640"></canvas>');
                         $('#canvas-container').append('<div id="box" class="tooltipme" hidden></div>');
@@ -176,6 +172,7 @@
 
                     }
                     else if($('#test').val() == 4) {
+                        $('#canvas-container').empty();
                         //$('#canvas-container').html($(this).val());
                         $('#canvas-container').append('<canvas id="canvas_cloud" class="canvas" width="1024" height="640"></canvas>');
                         $('#canvas-container').append('<div id="box" class="tooltipme" hidden></div>');
@@ -227,7 +224,6 @@
                     }
 					else{
 					    $('#canvas-container').empty();
-                        //$('#canvas-container').html($(this).val());
 					}
                 });
             });

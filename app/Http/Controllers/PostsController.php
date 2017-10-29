@@ -29,6 +29,16 @@ class PostsController extends Controller
     	return view('posts.create');
     }
 
+    public function login(){
+
+        return view('auth.login');
+    }
+
+    public function register(){
+
+        return view('auth.register');
+    }
+
     public function file(){
 
         return view('posts.file');
@@ -91,14 +101,16 @@ class PostsController extends Controller
                 }
                 $text_to_segment = trim($textarray);
                 $result[$i][0] = $shortname;
-                $result[$i][1] = $segment->get_segment_array($text_to_segment);
+                $result[$i][1] = array_values($segment->get_segment_array($text_to_segment));
                 $result[$i][2] = array_count_values($result[$i][1]);
                 $result[$i][3] = array_count_values(array_unique($result[$i][1]));
                 arsort($result[$i][2]);
             }
 
+            //Document Frequency Array.
             $df = $this->df($result);
 
+            //TFIDF Array.
             $tfidf = $this->tfidf($result,$df);
 
 //            $time_end = microtime(true);
@@ -150,6 +162,7 @@ class PostsController extends Controller
         //dd($tfidfword);
     }
 
+    //API Controller for Thai Word Segmentation.
     public function segmentapi(){
       //dd($_POST);
         // check api key จาก Database
