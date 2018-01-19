@@ -44,6 +44,12 @@ class PostsController extends Controller
         return view('posts.file');
     }
 
+    public function apiview(){
+
+        return view('posts.testapi');
+    }
+
+
     public function store(){
 
     	// $post = new Post;

@@ -13,6 +13,7 @@
         <nav class="nav blog-nav">
           <a class="nav-link" href="/text">Text</a>
           <a class="nav-link" href="/file">File</a>
+          <a class="nav-link" href="/apiview">API</a>
           <a class="nav-link ml-auto" href="#"></a>
 
             @if (Auth::guest())

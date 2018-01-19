@@ -17,7 +17,7 @@
                 var segment_word = <?php echo json_encode($result)?>;
                 //console.log(segment_word)
 
-                var i;
+                var i,a;
                 var visnum=0;
 
                 segment_word.forEach(function each(item) {
@@ -28,22 +28,56 @@
                     $('#vismain').append('<p></p>');
                     //console.log(vis.id)
                     i = item[1];
-                    console.log(item[0]); //File Name.
+                    a = item[1];
+                    //console.log(item[0]); //File Name.
                     var indexsentenSet = -1;
                     var index = 0;
                     var sentenSet = [""];
-                    var count = 10;
-                    i.forEach(function eachel(item2) {
-                      //console.log("i = "+ i + item2);  //Each Word In File Name.
+                    var count = 4;
+//                    i.forEach(function eachel(item2) {
+//                      //console.log("i = "+ i + item2);  //Each Word In File Name.
+//
+//                        if(  index%count == 0){
+//                            sentenSet[++indexsentenSet]={id:Math.floor(Math.random() * 1000000) + 400000,text:item2,count:Math.floor(Math.random() * 3000) + 500};
+//                        }else{
+//                            sentenSet[indexsentenSet].text += ' '+item2
+//                        }
+//                        index++;
+//                    })
+                    var Ncount = 7;
+                    if(a.length>Ncount){
 
-                        if(  index%count == 0){
-                            sentenSet[++indexsentenSet]={id:Math.floor(Math.random() * 1000000) + 400000,text:item2,count:Math.floor(Math.random() * 3000) + 500};
-                        }else{
-                            sentenSet[indexsentenSet].text += ' '+item2
+                        for (var i = 0; i <= a.length-Ncount; i++) {
+                            //console.log(i);
+                            var senten = [""];
+                            for(var j = 0; j < Ncount ;j++){
+                                //console.log(j+'array J = '+a[i+j]);
+                                if(j==0){
+                                    senten += a[i+j];
+                                }
+                                else{
+                                    senten += ' '+ a[i+j];
+                                }
+                            }
+                            sentenSet[i] = {id:Math.floor(Math.random() * 1000000) + 400000,text:senten,count:Math.floor(Math.random() * 5000) + 300};
                         }
-                        index++;
-                    })
+                    }
+                    else{
+                        var senten = [""];
+                        for (var i = 0; i <= a.length-1; i++) {
+                            //console.log(i + 'value = ' + a[i]);
+                            if(i==0){
+                                senten += a[i];
+                            }
+                            else{
+                                senten += ' '+ a[i];
+                            }
+                        }
+                        sentenSet[0] = {id:Math.floor(Math.random() * 1000000) + 400000,text:senten,count:Math.floor(Math.random() * 3000) + 500};;;
+                    }
                     //console.log(sentenSet);
+
+
                     const container = document.querySelector('#'+vis.id);
                     container.innerHTML = 'Loading ...';
 
@@ -64,7 +98,7 @@
                     container.innerHTML = '';
 
                     new SentenTree.SentenTreeVis(container)
-                        .data(model.getRenderedGraphs(5))
+                        .data(model.getRenderedGraphs(3))
                         .on('nodeClick', node => {
                         //console.log('node', node);
                     })
@@ -85,20 +119,20 @@
 
             </script>
 
-			<li>Total Document = {{count($result)}}</li>
-			@foreach($result as $dataword)
-				<li>{{$dataword[0]}}</li>
-				@foreach($dataword[1] as $wordSeg => $TermFrequency)
-					<li> -- {{$wordSeg}} : {{$TermFrequency}}</li>
+			{{--<li>Total Document = {{count($result)}}</li>--}}
+			{{--@foreach($result as $dataword)--}}
+				{{--<li>{{$dataword[0]}}</li>--}}
+				{{--@foreach($dataword[1] as $wordSeg => $TermFrequency)--}}
+					{{--<li> -- {{$wordSeg}} : {{$TermFrequency}}</li>--}}
 
-				@endforeach
-			@endforeach
-			<br>
+				{{--@endforeach--}}
+			{{--@endforeach--}}
+			{{--<br>--}}
 
-            @foreach($df as $DocFrequency => $DocFrequencyValue)
+            {{--@foreach($df as $DocFrequency => $DocFrequencyValue)--}}
 
-                <li>{{$DocFrequency}} : Document Frequency = {{$DocFrequencyValue}}</li>
-            @endforeach
+                {{--<li>{{$DocFrequency}} : Document Frequency = {{$DocFrequencyValue}}</li>--}}
+            {{--@endforeach--}}
 			<br>
 
         {{--Create visualize for TFIDF--}}
@@ -134,12 +168,21 @@
                                     "divlineThickness": "1",
                                     "divLineDashLen": "1",
                                     "divLineGapLen": "1",
-                                    "canvasBgColor": "#ffffff"
+                                    "canvasBgColor": "#ffffff",
+                                    "labelDisplay": "rotate",
+                                    "slantLabels": "1"
                                 },
 
                                 "data": [
+                                    <?php $countword=0; ?>
                                 @foreach($TFIDF_Word_Name as $wordname => $tfidfValue)
-                                    { "label": "{{$wordname}}", "value": "{{round($tfidfValue,3)}}"},
+                                        @if($countword<=9)
+                                        {
+                                            "label": "{{$wordname}}",
+                                            "value": "{{round($tfidfValue,3)}}"
+                                        },
+                                        @endif
+                                        <?php $countword++; ?>
                                 @endforeach
 //                                    {
 //                                        "label": "Dec",
