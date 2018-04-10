@@ -47,3 +47,8 @@ Route::post('/api', 'PostsController@segmentapi');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+
+Route::get('/wordcloud', 'WordCloudController@index');
+Route::get('/bubblechart', 'BubbleChartController@index');
+Route::get('/circlepacking', 'CirclePackingController@index');
+Route::get('/dendrogram', 'DendrogramController@index');
