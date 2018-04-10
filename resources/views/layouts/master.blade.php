@@ -84,15 +84,8 @@
      </div>
    </div> -->
 
-    <div class="container">
-
-      <div class="row">
-
-
+    <div class="container" >
         @yield ('content')
-
-      </div><!-- /.row -->
-
     </div><!-- /.container -->
 
   </body>

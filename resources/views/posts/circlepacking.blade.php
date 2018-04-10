@@ -1,4 +1,14 @@
+@extends ('layouts.master')
+<script src="js/d3.v4.min.js"></script>
+@section ('content')
+
 <!DOCTYPE html>
+<div align="center">
+  <h1>Circle Packing</h1>
+  <svg width="960" height="960"></svg>
+
+</div>
+
 <meta charset="utf-8">
 <style>
 
@@ -20,8 +30,7 @@
   }
 
 </style>
-<svg width="960" height="960"></svg>
-<script src="js/d3.v4.min.js"></script>
+
 <script>
 
   var svg = d3.select("svg"),
@@ -57,3 +66,5 @@
   });
 
 </script>
+
+@endsection

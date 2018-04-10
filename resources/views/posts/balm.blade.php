@@ -1,7 +1,8 @@
 @extends ('layouts.master')
 <link href="{{ URL::asset('css/card.css') }}" rel="stylesheet">
 @section ('content')
-    <div class="col-sm-8 blog-main text-center">
+
+    <div align="center">
 
         <h1>Thai Text Visualization</h1>
 

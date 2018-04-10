@@ -1,6 +1,16 @@
-<!DOCTYPE html>
-<svg width="960" height="960" font-family="sans-serif" font-size="10" text-anchor="middle"></svg>
+@extends ('layouts.master')
 <script src="js/d3.v4.min.js"></script>
+@section ('content')
+
+<!DOCTYPE html>
+<div align="center">
+  <h1>Bubble Chart</h1>
+  <svg width="960" height="960" font-family="sans-serif" font-size="10" text-anchor="middle"></svg>
+
+</div>
+
+
+
 <script>
 
   var svg = d3.select("svg"),
@@ -62,3 +72,5 @@
   });
 
 </script>
+
+@endsection
