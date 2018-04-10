@@ -27,6 +27,7 @@ Route::get('/', 'PostsController@create');
 Route::get('/text', 'PostsController@create');
 Route::get('/file', 'PostsController@file');
 Route::get('/apiview', 'PostsController@apiview');
+Route::get('/balm', 'PostsController@balm');
 Route::get('/login', 'PostsController@create');
 Route::get('/register', 'PostsController@file');
 //Route::get('/posts/create', 'PostsController@create');

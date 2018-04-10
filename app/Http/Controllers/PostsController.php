@@ -49,6 +49,11 @@ class PostsController extends Controller
         return view('posts.testapi');
     }
 
+    public function balm(){
+
+        return view('posts.balm');
+    }
+
 
     public function store(){
 
