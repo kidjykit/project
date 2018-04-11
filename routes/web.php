@@ -54,6 +54,7 @@ Route::get('/bubblechart', 'BubbleChartController@index');
 Route::post('/bubblechart/process', 'BubbleChartController@process');
 
 Route::get('/circlepacking', 'CirclePackingController@index');
+Route::post('/circlepacking/process', 'CirclePackingController@process');
 
 Route::get('/dendrogram', 'DendrogramController@index');
 

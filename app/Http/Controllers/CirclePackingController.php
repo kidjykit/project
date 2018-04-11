@@ -9,5 +9,16 @@ class CirclePackingController extends Controller
     	return view('posts.circlepacking');
     }
 
+
+
+    public function process(){
+
+        $body = $_POST['text_data'];
+        //replace below method by data generator function
+        $return_data = json_decode(file_get_contents("/Users/playbasis/Documents/kidjy/public/data/flare.json"), true);
+
+        return $return_data;
+    }
+
     
 }
