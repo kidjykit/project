@@ -33,7 +33,6 @@ Route::get('/register', 'PostsController@file');
 //Route::get('/posts/create', 'PostsController@create');
 
 Route::post('/posts/show', 'PostsController@segment');
-Route::post('/posts/process', 'PostsController@segment_ajax');
 Route::post('/posts/showfile', 'PostsController@segmentfile');
 // Route::get('/posts/{post}', 'PostsController@show');
 
@@ -50,6 +49,11 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 
 Route::get('/wordcloud', 'WordCloudController@index');
+
 Route::get('/bubblechart', 'BubbleChartController@index');
+Route::post('/bubblechart/process', 'BubbleChartController@process');
+
 Route::get('/circlepacking', 'CirclePackingController@index');
+
 Route::get('/dendrogram', 'DendrogramController@index');
+

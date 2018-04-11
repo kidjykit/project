@@ -31,7 +31,7 @@
     $("#svg_area").empty();
     $.ajax({
       type:'POST',
-      url:'/posts/process',
+      url:'/bubblechart/process',
       async:false,
       data: {"_token": "{{ csrf_token() }}",text_data: info},
       success: function(response){ // What to do if we succeed
