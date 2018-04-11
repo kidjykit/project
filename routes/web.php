@@ -33,6 +33,7 @@ Route::get('/register', 'PostsController@file');
 //Route::get('/posts/create', 'PostsController@create');
 
 Route::post('/posts/show', 'PostsController@segment');
+Route::post('/posts/process', 'PostsController@segment_ajax');
 Route::post('/posts/showfile', 'PostsController@segmentfile');
 // Route::get('/posts/{post}', 'PostsController@show');
 
