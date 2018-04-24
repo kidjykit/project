@@ -15,6 +15,12 @@
                 </div>
             </div>
             <div class="card-container">
+                <div class="card" onclick="window.location='{{ url("sentencetree") }}'">
+                    <div class="side"><img src="{{asset('image/SentenTree.png')}}" alt="Sentence Tree"></div>
+                    <div class="side back">Sentence Tree</div>
+                </div>
+            </div>
+            <div class="card-container">
                 <div class="card" onclick="window.location='{{ url("bubblechart") }}'">
                     <div class="side"><img src="{{asset('image/bubble_chart.png')}}" alt="Bubble Chart"></div>
                     <div class="side back">Bubble Chart</div>

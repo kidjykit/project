@@ -178,7 +178,8 @@ class PostsController extends Controller
       //dd($_POST);
         // check api key จาก Database
         $users = DB::table('users')->where('apikey', '=', $_POST['apikey'])->count();
-        //echo $users;
+        //$users = 1;
+	//echo $users;
         if($users == 1) {
             $file = request()->file('textword');
             $content = $file->openFile('r');
@@ -193,10 +194,7 @@ class PostsController extends Controller
             $result = $segment->get_segment_array($text_to_segment);
 //        $zipfile = new \ZipArchive();
 //        $zipfile->ex
-            return response()->json([
-                'word' => $result,
-                'wordcount' => count($result)
-            ]);
+            return json_encode( $result, JSON_UNESCAPED_UNICODE );
         }
         else{
             return 'authen failed';

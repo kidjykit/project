@@ -1,75 +1,95 @@
 @extends ('layouts.master')
 <script src="js/d3.v4.min.js"></script>
+<link href="{{ URL::asset('css/seperator.css') }}" rel="stylesheet">
 @section ('content')
 
 <!DOCTYPE html>
-<div align="center">
-  <h1>Bubble Chart</h1>
-  <svg width="960" height="960" font-family="sans-serif" font-size="10" text-anchor="middle"></svg>
+<main class="choose-ur-destiny">
+  <div class="container">
+    <section class="variant">
+      <div align="center">
+        <h1>Input</h1>
+        <textarea id="text_area" name="text_area" class="form-control" style="width:100%;height:100%;"></textarea>
+      </div>
+    </section>
+    <div class="variant variant--separator">
+      <button class="btn btn-primary" onclick="process_data();" >Process</button>
+    </div>
+    <section class="variant">
+      <div align="center">
+        <h1>WordCloud</h1>
+        <div id="canvas-container"></div>
+      </div>
+    </section>
+  </div>
+</main>
 
-</div>
-
-<script src="js/d3.v4.min.js"></script>
 <script>
 
-  var svg = d3.select("svg"),
-          width = +svg.attr("width"),
-          height = +svg.attr("height");
+  function process_data() {
+    var info = $('#text_area').val();
+    $("#svg_area").empty();
+    $.ajax({
+      type:'POST',
+      url:'/wordcloud/process',
+      async:false,
+      data: {"_token": "{{ csrf_token() }}",text_data: info},
+      success: function(response){ // What to do if we succeed
+        $('#canvas-container').empty();
+        //$('#canvas-container').html($(this).val());
+        $('#canvas-container').append('<canvas id="canvas_cloud" class="canvas" width="600px" height="500px"></canvas>');
+        $('#canvas-container').append('<div id="box" class="tooltipme" hidden></div>');
 
-  var format = d3.format(",d");
+        $.getScript("{!! asset('js/wordcloud2.js') !!}", function () {
+            var text = "";
+            var data_list2 = Array();
+            // var data_list = Array(["kit", 30],["นครสวรรค์", 40],["กรุงเทพ", 50],["บ้าน", 10]);
+            for(var x in response){
+              // text += '['+response[x].id +' , '+ response[x].value+']'+',';
+               data_list2.push(Array(response[x].id, response[x].value));
+            }
+            // console.log(data_list);
+            // console.log(data_list2);
+            var options =
+                {
+                    list : data_list2,
 
-  var color = d3.scaleOrdinal(d3.schemeCategory20c);
+                    gridSize: 13,
+                    weightFactor: 10,
+                    fontFamily: 'Finger Paint, cursive, sans-serif',
+                    color: '#f0f0c0',
+                    hover: drawBox,
+                    ellipticity: 1,
+                    backgroundColor: '#001f00'
+                }
+            WordCloud(document.getElementById('canvas_cloud'), options);
 
-  var pack = d3.pack()
-          .size([width, height])
-          .padding(1.5);
+            var $box = document.getElementById('box');
+            function drawBox(item, dimension) {
 
-  d3.csv("data/flare.csv", function(d) {
-    d.value = +d.value;
-    if (d.value) return d;
-  }, function(error, classes) {
-    if (error) throw error;
+                if (!dimension) {
+                    $box.hidden= true;
 
-    var root = d3.hierarchy({children: classes})
-            .sum(function(d) { return d.value; })
-            .each(function(d) {
-              if (id = d.data.id) {
-                var id, i = id.lastIndexOf(".");
-                d.id = id;
-                d.package = id.slice(0, i);
-                d.class = id.slice(i + 1);
-              }
-            });
+                    return;
+                }
 
-    var node = svg.selectAll(".node")
-            .data(pack(root).leaves())
-            .enter().append("g")
-            .attr("class", "node")
-            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+                $box.hidden= false;
+                $box.style.left = dimension.x  + 'px';
+                $box.style.top = dimension.y + 'px';
+                $box.style.width = dimension.w + 'px';
+                $box.style.height = dimension.h + 'px';
+                $box.innerHTML = "<span class='tooltiptext'>" + item[0] + ': ' + item[1] + "</span>";
+            }
+        });
 
-    node.append("circle")
-            .attr("id", function(d) { return d.id; })
-            .attr("r", function(d) { return d.r; })
-            .style("fill", function(d) { return color(d.package); });
+      },
+      error: function(jqXHR, textStatus, errorThrown) { // What to do if we fail
+        console.log(JSON.stringify(jqXHR));
+        console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+      }
+    });
 
-    node.append("clipPath")
-            .attr("id", function(d) { return "clip-" + d.id; })
-            .append("use")
-            .attr("xlink:href", function(d) { return "#" + d.id; });
-
-    node.append("text")
-            .attr("clip-path", function(d) { return "url(#clip-" + d.id + ")"; })
-            .selectAll("tspan")
-            .data(function(d) { return d.class.split(/(?=[A-Z][^A-Z])/g); })
-            .enter().append("tspan")
-            .attr("x", 0)
-            .attr("y", function(d, i, nodes) { return 13 + (i - nodes.length / 2 - 0.5) * 10; })
-            .text(function(d) { return d; });
-
-    node.append("title")
-            .text(function(d) { return d.id + "\n" + format(d.value); });
-  });
-
+  }
 </script>
 
 @endsection
