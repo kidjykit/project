@@ -49,9 +49,14 @@ class PostsController extends Controller
         return view('posts.testapi');
     }
 
-    public function balm(){
+    public function allvis(){
 
-        return view('posts.balm');
+        return view('posts.allvis');
+    }
+
+    public function modal(){
+
+        return view('posts.modal');
     }
 
 

@@ -23,11 +23,12 @@
 // 	//return $tasks;
 //     return view('tasks.show', compact('task'));
 // });
-Route::get('/', 'PostsController@create');
+Route::get('/', 'PostsController@modal');
 Route::get('/text', 'PostsController@create');
 Route::get('/file', 'PostsController@file');
 Route::get('/apiview', 'PostsController@apiview');
-Route::get('/balm', 'PostsController@balm');
+Route::get('/allvis', 'PostsController@allvis');
+Route::get('/modal', 'PostsController@modal');
 Route::get('/login', 'PostsController@create');
 Route::get('/register', 'PostsController@file');
 //Route::get('/posts/create', 'PostsController@create');
@@ -47,6 +48,11 @@ Route::post('/api', 'PostsController@segmentapi');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+
+
+Route::post('/modal/vistext', 'ModalController@process');
+
+Route::post('/modal/visfile', 'ModalController@processfile');
 
 Route::get('/wordcloud', 'WordCloudController@index');
 Route::post('/wordcloud/process', 'WordCloudController@process');

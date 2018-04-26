@@ -9,7 +9,7 @@
     <section class="variant">
       <div align="center">
         <h1>Input</h1>
-        <textarea id="text_area" name="text_area" class="form-control" style="width:700px;height:700px;"></textarea>
+        <textarea id="text_area" name="text_area" class="form-control" style="width:100%;height:100%;"></textarea>
       </div>
     </section>
     <div class="variant variant--separator">

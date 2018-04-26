@@ -3,7 +3,7 @@
   <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
@@ -12,21 +12,20 @@
     <title>Process</title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
-
-
+    <link href="{{ URL::asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="/css/blog.css" rel="stylesheet">
 
 
     {{--Load jQuery--}}
-    <script type="text/javascript" src="{!! asset('js/jquery-1.12.4.js') !!}"></script>
+    <script type="text/javascript" src="{!! asset('js/jquery-3.3.1.min.js') !!}"></script>
     <script type="text/javascript" src="{!! asset('js/jquery-ui.js') !!}"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="{!! asset('js/tether.min.js') !!}"></script>
+    <script type="text/javascript" src="{!! asset('js/bootstrap.min.js') !!}"></script>
     <style>
       #canvas-container {
-        overflow-x: auto;
-        overflow-y: visible;
+        /*overflow-x: auto;*/
+        /*overflow-y: visible;*/
         position: relative;
         margin-top: 20px;
         margin-bottom: 20px;
@@ -87,6 +86,5 @@
     <div class="container" >
         @yield ('content')
     </div><!-- /.container -->
-
   </body>
 </html>
