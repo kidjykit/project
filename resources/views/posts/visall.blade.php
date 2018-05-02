@@ -7,10 +7,10 @@
 
 <div id="js-modal" class="modal_full">
     <div class="card_modal">
-        <div class="card_modal-content">
+        <div class="card_modal-content" align="center">
             <span id="js-toggleModal" class="icon-toggleModal"></span>
-            <svg id="svg_area" width="800" height="800" font-family="sans-serif" font-size="10" text-anchor="middle"></svg>
-            <div id="vismain"  width="750" height="750" font-family="sans-serif" font-size="10" text-anchor="middle" style="position: relative;"></div>
+            <svg id="svg_area" width="600" height="600" font-family="sans-serif" font-size="10" text-anchor="middle"></svg>
+            <div id="vismain"  width="750" height="600" font-family="sans-serif" font-size="10" text-anchor="middle" style="position: relative;"></div>
 
         </div>
     </div>
@@ -21,8 +21,8 @@
         <h1>Thai Text Visualization</h1>
 
         <div id="block_container">
-
-                <?php $textarray = ''; ?>
+                @if (!empty($body))
+                <?php $result = ''; ?>
                 <div class="card-container">
                     <div class="card" id="wordcloud-modal" class="btn btn-info btn-lg">
                         <div class="side"><img src="{{asset('image/wordcloud.jpg')}}" alt="Word Cloud"></div>
@@ -41,18 +41,17 @@
                         <div class="side back">Bubble Chart</div>
                     </div>
                 </div>
+                @endif
 
+            @if (!empty($result))
 
-            @if (!empty($textarray))
-
-                <?php $body = ''; ?>
-
+                <?php $body = '';?>
 
                 <div class="card-container">
-                    <div class="card" onclick="process_file();" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
-                        <div class="side"><img src="{{asset('image/SentenTree.png')}}" alt="Sentence Tree"></div>
-                        <div class="side back">Sentence Tree</div>
-                    </div>
+                  <div class="card" id="sententree-modal-file" class="btn btn-info btn-lg">
+                      <div class="side"><img src="{{asset('image/SentenTree.png')}}" alt="Sentence Tree"></div>
+                      <div class="side back">Sentence Tree</div>
+                  </div>
                 </div>
 
                 <div class="card-container">
@@ -62,7 +61,7 @@
                     </div>
                 </div>
                 <div class="card-container">
-                    <div class="card" onclick="process_file();" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
+                    <div class="card" id="dendrogram-modal-file" class="btn btn-info btn-lg">
                         <div class="side"><img src="{{asset('image/dendrogram.png')}}" alt="Dendrogram"></div>
                         <div class="side back">Dendrogram</div>
                     </div>
@@ -81,8 +80,8 @@
         document.getElementById('js-modal').classList.toggle('open');
     })
 
-
     //wordcloud-modal
+    @if (!empty($body))
     document.getElementById('wordcloud-modal').addEventListener('click', function() {
         var x = <?php echo json_encode($body); ?>;
         $.ajax({
@@ -95,7 +94,7 @@
 
                 document.getElementById("svg_area").style.display = "none";
                 //$('#canvas-container').html($(this).val());
-                $('#vismain').append('<canvas id="canvas_cloud" class="canvas" width="750" height="750"></canvas>');
+                $('#vismain').append('<canvas id="canvas_cloud" class="canvas" width="900" height="600"></canvas>');
                 $('#vismain').append('<div id="box" class="tooltipme" position="relative" hidden ></div>');
 
                 $.getScript("{!! asset('js/wordcloud2.js') !!}", function () {
@@ -168,7 +167,6 @@
                 document.getElementById("svg_area").style.display = "none";
                 // console.log(data_list2);
                 data_list2.forEach(function each(item) {
-//
                     var vis = document.createElement("div");
                     vis.id = 'vis'+(++visnum);
                     $('#vismain').append(vis);
@@ -210,7 +208,7 @@
                                 senten += ' '+ a[i];
                             }
                         }
-                        sentenSet[0] = {id:Math.floor(Math.random() * 1000000) + 400000,text:senten,count:Math.floor(Math.random() * 3000) + 500};;;
+                        sentenSet[0] = {id:Math.floor(Math.random() * 1000000) + 400000,text:senten,count:Math.floor(Math.random() * 3000) + 500};
                     }
                     // console.log(sentenSet);
 
@@ -323,11 +321,127 @@
         this.classList.toggle('open');
         document.getElementById('js-modal').classList.toggle('open');
     })
+    @endif
+
+    @if (!empty($result))
+    //sententree-modal
+    document.getElementById('sententree-modal-file').addEventListener('click', function() {
+        var x = <?php echo json_encode($result); ?>;
+        $.ajax({
+            type:'POST',
+            url:'/sentencetree/processfile',
+            async:false,
+            data: {"_token": "{{ csrf_token() }}",text_data: x},
+            success: function(response){ // What to do if we succeed
+                var data_list2 = response;
+                var i,a;
+                var visnum=0;
+                $('#vismain').empty();
+                document.getElementById("svg_area").style.display = "none";
+                // console.log(data_list2);
+                data_list2.forEach(function each(item) {
+                    var vis = document.createElement("div");
+                    vis.id = 'vis'+(++visnum);
+                    $('#vismain').append(vis);
+                    $('#vismain').append('<p></p>');
+                    //console.log(vis.id)
+                    i = item[1];
+                    a = item[1];
+                    //console.log(item[0]); //File Name.
+                    var indexsentenSet = -1;
+                    var index = 0;
+                    var sentenSet = [""];
+                    var count = 4;
+                    var Ncount = 7;
+                    if(a.length>Ncount){
+
+                        for (var i = 0; i <= a.length-Ncount; i++) {
+                            //console.log(i);
+                            var senten = [""];
+                            for(var j = 0; j < Ncount ;j++){
+                                //console.log(j+'array J = '+a[i+j]);
+                                if(j==0){
+                                    senten += a[i+j];
+                                }
+                                else{
+                                    senten += ' '+ a[i+j];
+                                }
+                            }
+                            sentenSet[i] = {id:Math.floor(Math.random() * 1000000) + 400000,text:senten,count:Math.floor(Math.random() * 5000) + 300};
+                        }
+                    }
+                    else{
+                        var senten = [""];
+                        for (var i = 0; i <= a.length-1; i++) {
+                            //console.log(i + 'value = ' + a[i]);
+                            if(i==0){
+                                senten += a[i];
+                            }
+                            else{
+                                senten += ' '+ a[i];
+                            }
+                        }
+                        sentenSet[0] = {id:Math.floor(Math.random() * 1000000) + 400000,text:senten,count:Math.floor(Math.random() * 3000) + 500};
+                    }
+                    // console.log(sentenSet);
 
 
-  function process_file() {
+                    const container = document.querySelector('#'+vis.id);
+                    container.innerHTML = 'Loading ...';
 
-    var y = <?php echo json_encode($textarray)?>;
-  }
+                    //const data = [{id:123,text:'123 222 344 1111',count:123},{id:123,text:'123 222 34553',count:123},{id:123,text:'123 444 222',count:123}];
+                    const data = sentenSet;
+                    //console.log(data);
+                    console.time('Build model');
+                    const model = new SentenTree.SentenTreeBuilder()
+                            // enforce tokenize by space
+                                    .tokenize(SentenTree.tokenizer.tokenizeBySpace)
+                                    .transformToken(token => (/score(d|s)?/.test(token) ? 'score' : token))
+                    // you can adjust the maxSupportRatio (0-1)
+                    // higher maxsupport will tend to group the graph together in one piece
+                    // lower maxsupport will break it into multiple graphs
+                    .buildModel(data, { maxSupportRatio: 1 });
+                    console.timeEnd('Build model');
+
+                    container.innerHTML = '';
+
+                    new SentenTree.SentenTreeVis(container)
+                            .data(model.getRenderedGraphs(3))
+                            .on('nodeClick', node => {
+                        //console.log('node', node);
+                    })
+                })
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) { // What to do if we fail
+                console.log(JSON.stringify(jqXHR));
+                console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+            }
+        });
+        this.classList.toggle('open');
+        document.getElementById('js-modal').classList.toggle('open');
+    })
+
+    //dendrogram-modal
+    document.getElementById('dendrogram-modal-file').addEventListener('click', function() {
+        var x = <?php echo json_encode($result); ?>;
+        $.ajax({
+            type:'POST',
+            url:'/dendrogram/processfile',
+            async:false,
+            data: {"_token": "{{ csrf_token() }}",text_data: x},
+            success: function(response){
+              $('#vismain').empty();
+              console.log(response);
+            },
+            error: function(jqXHR, textStatus, errorThrown) { // What to do if we fail
+                console.log(JSON.stringify(jqXHR));
+                console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+            }
+        });
+        this.classList.toggle('open');
+        document.getElementById('js-modal').classList.toggle('open');
+    })
+    @endif
 </script>
 @endsection

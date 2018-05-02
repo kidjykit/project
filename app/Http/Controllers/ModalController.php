@@ -34,7 +34,8 @@ class ModalController extends Controller
       if(!empty($_FILES['textfile']['name'])){
         $result = array();
         $file = request()->allFiles();
-
+        $segment = new Segment();
+        $text_to_segment = "";
         for($i=0; $i<count($_FILES['textfile']['name']); $i++) {
             $textarray = " ";
             $content = " ";
@@ -44,13 +45,18 @@ class ModalController extends Controller
             foreach ($content as $linenum => $line) {
                 $textarray = $textarray . $line;
             }
-             //echo $textarray;
+            $text_to_segment = trim($textarray);
+            $result[$i][0] = $shortname;
+            $result[$i][1] = array_values($segment->get_segment_array($text_to_segment));
+            $result[$i][2] = array_count_values($result[$i][1]);
+            $result[$i][3] = array_count_values(array_unique($result[$i][1]));
+            arsort($result[$i][2]);
         }
 
         $body = '';
 
       }
-      return view('posts.visall', compact('textarray'));
+      return view('posts.visall', compact('result'));
 
     }
 

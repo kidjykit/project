@@ -29,8 +29,8 @@ Route::get('/file', 'PostsController@file');
 Route::get('/apiview', 'PostsController@apiview');
 Route::get('/allvis', 'PostsController@allvis');
 Route::get('/modal', 'PostsController@modal');
-Route::get('/login', 'PostsController@create');
-Route::get('/register', 'PostsController@file');
+// Route::get('/login', 'PostsController@create');
+// Route::get('/register', 'PostsController@file');
 //Route::get('/posts/create', 'PostsController@create');
 
 Route::post('/posts/show', 'PostsController@segment');
@@ -49,7 +49,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
-
 Route::post('/modal/vistext', 'ModalController@process');
 
 Route::post('/modal/visfile', 'ModalController@processfile');
@@ -59,6 +58,7 @@ Route::post('/wordcloud/process', 'WordCloudController@process');
 
 Route::get('/sentencetree', 'SentenceTreeController@index');
 Route::post('/sentencetree/process', 'SentenceTreeController@process');
+Route::post('/sentencetree/processfile', 'SentenceTreeController@processfile');
 
 Route::get('/bubblechart', 'BubbleChartController@index');
 Route::post('/bubblechart/process', 'BubbleChartController@process');
@@ -67,3 +67,4 @@ Route::get('/circlepacking', 'CirclePackingController@index');
 Route::post('/circlepacking/process', 'CirclePackingController@process');
 
 Route::get('/dendrogram', 'DendrogramController@index');
+Route::post('/dendrogram/processfile', 'DendrogramController@processfile');

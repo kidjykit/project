@@ -3,6 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+
+use Illuminate\Http\Request;
+use Mail;
+
+use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -74,6 +79,14 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $apikey = $this->generateRandomString(10);
+
+        // $apistore = ['api'=>$apikey];
+
+        Mail::send('posts.mail', ['api'=>$apikey], function($message) use ($data) {
+         $message->to($data['email'], $data['name'])->subject
+            ('API KEY');
+         $message->from('thaiwordvis@mahidol.ac.th','thaiwordvis');
+       });
 
         return User::create([
             'name' => $data['name'],

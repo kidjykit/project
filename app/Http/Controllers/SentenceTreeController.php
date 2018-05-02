@@ -24,4 +24,10 @@ class SentenceTreeController extends Controller
         return $result_array;
     }
 
+    public function processfile(){
+
+        $allfile = ($_POST['text_data']);
+        return $allfile;
+    }
+
 }
