@@ -430,6 +430,7 @@
             data: {"_token": "{{ csrf_token() }}",text_data: x},
             success: function(response){
               $('#vismain').empty();
+
               console.log(response);
             },
             error: function(jqXHR, textStatus, errorThrown) { // What to do if we fail

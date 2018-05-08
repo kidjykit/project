@@ -40,6 +40,7 @@ class ModalController extends Controller
             //echo $shortname."<br>";
             $content = $file['textfile'][$i]->openFile('r');
             foreach ($content as $linenum => $line) {
+                //echo $line;
                 $textarray = $textarray . $line;
             }
             $text_to_segment = trim($textarray);
@@ -50,8 +51,9 @@ class ModalController extends Controller
             arsort($result[$i][2]);
         }
         $body = '';
+
+        return view('posts.visall', compact('result'));
       }
-      return view('posts.visall', compact('result'));
     }
 
 }
