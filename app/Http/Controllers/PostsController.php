@@ -186,20 +186,34 @@ class PostsController extends Controller
         //$users = 1;
 	//echo $users;
         if($users == 1) {
-            $file = request()->file('textword');
-            $content = $file->openFile('r');
-            $textarray = "";
-            foreach ($content as $linenum => $line) {
-                //echo $line;
-                $textarray = $textarray . $line;
-            }
-            //print_r($textarray);
-            $text_to_segment = trim($textarray);
+          $time_start = microtime(true);
+
+          if(!empty($_FILES['textword']['name'])){
+            $file = request()->allFiles();
             $segment = new Segment();
-            $result = $segment->get_segment_array($text_to_segment);
+            $text_to_segment = "";
+            for($i=0; $i<count($_FILES['textword']['name']); $i++) {
+                $textarray = " ";
+                $content = " ";
+                $shortname = $_FILES['textword']['name'][$i];
+                //echo $shortname."<br>";
+                $content = $file['textword'][$i]->openFile('r');
+                foreach ($content as $linenum => $line) {
+                    //echo $line;
+                    $textarray = $textarray . $line;
+                }
+                $text_to_segment = trim($textarray);
+                $result[] = array("Filename"=>$shortname, "Wordsegment"=> array_values($segment->get_segment_array($text_to_segment)));
+            }
+            $time_end = microtime(true);
+            $time = round($time_end - $time_start,4)." ms";
+            $result[] = array("Time Process"=>$time);
+            return json_encode( $result, JSON_UNESCAPED_UNICODE );
+          }
 //        $zipfile = new \ZipArchive();
 //        $zipfile->ex
-            return json_encode( $result, JSON_UNESCAPED_UNICODE );
+
+            // return json_encode( $result, JSON_UNESCAPED_UNICODE );
         }
         else{
             return 'authen failed';

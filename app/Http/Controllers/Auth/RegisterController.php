@@ -85,7 +85,7 @@ class RegisterController extends Controller
         Mail::send('posts.mail', ['api'=>$apikey], function($message) use ($data) {
          $message->to($data['email'], $data['name'])->subject
             ('API KEY');
-         $message->from('thaiwordvis@mahidol.ac.th','thaiwordvis');
+         $message->from('dokaponkit@gmail.com','thaiwordvis');
        });
 
         return User::create([

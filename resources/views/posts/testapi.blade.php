@@ -9,10 +9,10 @@
 
             <div class="form-group">
                 <label for="input">Input:</label><br>
-                <input type="file" name="textword" id="uploader" multiple="multiple"/>
+                <input type="file" name="textword[]" id="uploader" multiple="multiple"/>
             </div>
             <div class="form-group">
-                <label for="input">API KEY: (Test KEY: 1q2w3e4rasd)</label><br>
+                <label for="input">API KEY: (Test KEY: geFZYVLJS2)</label><br>
                 <input type="input" name="apikey" id="uploader" multiple="multiple"/>
             </div>
             <div class="form-group">

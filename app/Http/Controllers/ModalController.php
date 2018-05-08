@@ -25,12 +25,9 @@ class ModalController extends Controller
     }
 
     public function processfile(){
-
       $this->validate(request(), [
           'textfile' => 'required'
       ]);
-
-
       if(!empty($_FILES['textfile']['name'])){
         $result = array();
         $file = request()->allFiles();
@@ -52,48 +49,9 @@ class ModalController extends Controller
             $result[$i][3] = array_count_values(array_unique($result[$i][1]));
             arsort($result[$i][2]);
         }
-
         $body = '';
-
       }
       return view('posts.visall', compact('result'));
-
-    }
-
-    public function makevis(){
-
-      // $this->validate(request(), [
-      //     'body' => 'required',
-      //     'textfile' => 'required'
-      // ]);
-
-      if(!empty($_POST['text_data'])){
-        $body = $_POST['text_data'];
-        $textarray = '';
-         // echo $body,$hiddenfiled;
-      }
-
-      if(!empty($_FILES['allfile']['name'])){
-        $result = array();
-        $file = request()->allFiles();
-
-        for($i=0; $i<count($_FILES['allfile']['name']); $i++) {
-            $textarray = " ";
-            $content = " ";
-            $shortname = $_FILES['allfile']['name'][$i];
-            //echo $shortname."<br>";
-            $content = $file['allfile'][$i]->openFile('r');
-            foreach ($content as $linenum => $line) {
-                $textarray = $textarray . $line;
-            }
-             // echo $textarray,$hiddenfiled;
-        }
-
-        $body = '';
-
-      }
-      // return view('posts.modal',['data1' => $body, 'data2' => $textarray, 'hiddentype' => $hiddenfiled]);
-      return ['data1' => $body,'data2' => $textarray];
     }
 
 }

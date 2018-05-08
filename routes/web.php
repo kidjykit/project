@@ -47,7 +47,7 @@ Route::post('/api', 'PostsController@segmentapi');
 // router สำหรับทำการ resgister
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home', 'PostsController@modal');
 
 Route::post('/modal/vistext', 'ModalController@process');
 
@@ -68,3 +68,5 @@ Route::post('/circlepacking/process', 'CirclePackingController@process');
 
 Route::get('/dendrogram', 'DendrogramController@index');
 Route::post('/dendrogram/processfile', 'DendrogramController@processfile');
+
+Route::post('/columnchart/processfile', 'DendrogramController@columnchart');

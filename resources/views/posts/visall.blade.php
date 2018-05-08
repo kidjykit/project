@@ -55,11 +55,12 @@
                 </div>
 
                 <div class="card-container">
-                    <div class="card" onclick="process_file();" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
-                        <div class="side"><img src="{{asset('image/circle_packing.png')}}" alt="Circle Packing"></div>
-                        <div class="side back">Circle Packing</div>
+                      <div class="card" id="columnchart-modal-file" class="btn btn-info btn-lg">
+                        <div class="side"><img src="{{asset('image/column_chart.jpg')}}" alt="Column Chart"></div>
+                        <div class="side back">Column Chart</div>
                     </div>
                 </div>
+
                 <div class="card-container">
                     <div class="card" id="dendrogram-modal-file" class="btn btn-info btn-lg">
                         <div class="side"><img src="{{asset('image/dendrogram.png')}}" alt="Dendrogram"></div>
@@ -72,7 +73,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <script>
     document.getElementById('js-toggleModal').addEventListener('click', function() {
@@ -105,8 +105,6 @@
                         // text += '['+response[x].id +' , '+ response[x].value+']'+',';
                         data_list2.push(Array(response[x].id, response[x].value));
                     }
-                    // console.log(data_list);
-                    // console.log(data_list2);
                     var options =
                     {
                         list : data_list2,
@@ -149,7 +147,6 @@
         this.classList.toggle('open');
         document.getElementById('js-modal').classList.toggle('open');
     })
-
 
     //sententree-modal
     document.getElementById('sententree-modal').addEventListener('click', function() {
@@ -321,6 +318,7 @@
         this.classList.toggle('open');
         document.getElementById('js-modal').classList.toggle('open');
     })
+
     @endif
 
     @if (!empty($result))
@@ -442,6 +440,89 @@
         this.classList.toggle('open');
         document.getElementById('js-modal').classList.toggle('open');
     })
+
+    document.getElementById('columnchart-modal-file').addEventListener('click', function() {
+        var x = <?php echo json_encode($result); ?>;
+        $.ajax({
+            type:'POST',
+            url:'/columnchart/processfile',
+            async:false,
+            data: {"_token": "{{ csrf_token() }}",text_data: x},
+            success: function(response){
+
+              var data_list = Array();
+              for(var doc in response){
+                //console.log(response[doc].id,response[doc].value);
+                data_list.push(Array(response[doc].id, response[doc].value));
+              }
+              // console.log(data_list);
+              var visnum=0;
+              $('#vismain').empty();
+              document.getElementById("svg_area").style.display = "none";
+              data_list.forEach(function each(item) {
+                var vis = document.createElement("div");
+                vis.id = item[0];
+                $('#vismain').append(vis);
+                $('#vismain').append('<p></p>');
+                console.log(Object.keys(item[1]));
+
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({
+                        type: 'column3d',
+                        renderAt: item[0],
+                        width: '500',
+                        height: '300',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": {
+                                "caption": "Term Frequency Inverse Document Frequency",
+                                "subCaption": item[0],
+                                "xAxisName": "Words",
+                                "yAxisName": "TFIDF Value",
+                                "paletteColors": "#0075c2,#1aaf5d,#f2c500,#f20000,#00c500",
+                                "valueFontColor": "#ffffff",
+                                "baseFont": "Helvetica Neue,Arial",
+                                "captionFontSize": "14",
+                                "subcaptionFontSize": "14",
+                                "subcaptionFontBold": "0",
+                                "placeValuesInside": "1",
+                                "rotateValues": "1",
+                                "showShadow": "0",
+                                "divlineColor": "#999999",
+                                "divLineIsDashed": "1",
+                                "divlineThickness": "1",
+                                "divLineDashLen": "1",
+                                "divLineGapLen": "1",
+                                "canvasBgColor": "#ffffff",
+                                "labelDisplay": "rotate",
+                                "slantLabels": "1"
+                            },
+
+                            "data": [
+                              {
+                                "label": Object.keys(item[1]),
+                                "value": Object.values(item[1])
+                              },
+                            ]
+                        }
+                    });
+                    revenueChart.render();
+                });
+
+              })
+              // console.log(response);
+            },
+            error: function(jqXHR, textStatus, errorThrown) { // What to do if we fail
+                console.log(JSON.stringify(jqXHR));
+                console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+            }
+        });
+        this.classList.toggle('open');
+        document.getElementById('js-modal').classList.toggle('open');
+    })
+
     @endif
 </script>
+<script type="text/javascript" src="https://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
+<script type="text/javascript" src="https://static.fusioncharts.com/code/latest/fusioncharts.charts.js"></script>
 @endsection

@@ -12,8 +12,9 @@ class DendrogramController extends Controller
 
     public function processfile(){
 
-      $topwordlist = $this->selecttopword($_POST['text_data'], 1);
+      $topwordlist = $this->selecttopword($_POST['text_data'], 10);
       print_r($topwordlist);
+      // print_r($_POST['text_data']);
 
     }
 
@@ -29,12 +30,15 @@ class DendrogramController extends Controller
             if($xx==$keyy){
               $sumfre = $value*$xxvalue;
               // echo "word : ".$keyy." Frequency = ".$sumfre;
+              //echo $key[0];
 
             }
 
             // code...
           }
+
           $topwordfreq[$keyy] = $sumfre;
+          // array_push($topwordfreq,$key[0]);
         }
       }
       arsort($topwordfreq);
@@ -56,5 +60,18 @@ class DendrogramController extends Controller
         }
         $dfwordcount = array_count_values($dfword);
         return $dfwordcount;
+    }
+
+
+
+    public function columnchart(){
+
+      $return_data = array();
+      foreach($_POST['text_data'] as $key => $value){
+          $return_data[] = array("id"=>$key, "value"=> $value);
+      }
+      //echo implode(' | ', $result);
+      return $return_data;
+
     }
 }

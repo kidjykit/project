@@ -33,6 +33,7 @@
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 {{ csrf_field() }}
+                                <input type="hidden" name="logout" value="1">
                             </form>
             @endif
         </nav>
