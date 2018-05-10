@@ -1,15 +1,16 @@
 @extends ('layouts.master')
 <link href="{{ URL::asset('css/card.css') }}" rel="stylesheet">
 <script type="text/javascript" src="{!! asset('js/d3.v4.min.js') !!}"></script>
-<script src="https://rawgit.com/twitter/SentenTree/master/dist/sententree-standalone.min.js"></script>
+<script src="{{ URL::asset('js/sententree-standalone.min.js') }}"></script>
 @section ('content')
 <link href="{{ URL::asset('css/modal_full.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('css/dendrogram.css') }}" rel="stylesheet">
 
 <div id="js-modal" class="modal_full">
     <div class="card_modal">
         <div class="card_modal-content" align="center">
             <span id="js-toggleModal" class="icon-toggleModal"></span>
-            <svg id="svg_area" width="600" height="600" font-family="sans-serif" font-size="10" text-anchor="middle"></svg>
+            <svg id="svg_area" width="600" height="1000" font-family="sans-serif" font-size="10" text-anchor="middle"></svg>
             <div id="vismain"  width="750" height="600" font-family="sans-serif" font-size="10" text-anchor="middle" style="position: relative;"></div>
 
         </div>
@@ -428,10 +429,56 @@
             url:'/dendrogram/processfile',
             async:false,
             data: {"_token": "{{ csrf_token() }}",text_data: x},
-            success: function(response){
-              $('#vismain').empty();
+            success: function(data){
+                $('#vismain').empty();
+                document.getElementById("svg_area").style.display = "block";
 
-              console.log(response);
+                var svg = d3.select("svg"),
+                        width = +svg.attr("width"),
+                        height = +svg.attr("height"),
+                        g = svg.append("g").attr("transform", "translate(40,0)");
+
+                var tree = d3.cluster()
+                        .size([height, width - 160]);
+
+                var stratify = d3.stratify()
+                        .parentId(function(d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
+
+
+
+
+                    var root = stratify(data)
+                            .sort(function(a, b) { return (a.height - b.height) || a.id.localeCompare(b.id); });
+
+                    tree(root);
+
+                    var link = g.selectAll(".link")
+                            .data(root.descendants().slice(1))
+                            .enter().append("path")
+                            .attr("class", "link")
+                            .attr("d", function(d) {
+                                return "M" + d.y + "," + d.x
+                                        + "C" + (d.parent.y + 100) + "," + d.x
+                                        + " " + (d.parent.y + 100) + "," + d.parent.x
+                                        + " " + d.parent.y + "," + d.parent.x;
+                            });
+
+                    var node = g.selectAll(".node")
+                            .data(root.descendants())
+                            .enter().append("g")
+                            .attr("class", function(d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
+                            .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+
+                    node.append("circle")
+                            .attr("r", 2.5);
+
+                    node.append("text")
+                            .attr("dy", 3)
+                            .attr("x", function(d) { return d.children ? -8 : 8; })
+                            .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
+                            .text(function(d) { return d.id.substring(d.id.lastIndexOf(".") + 1); });
+
+                //console.log(response);
             },
             error: function(jqXHR, textStatus, errorThrown) { // What to do if we fail
                 console.log(JSON.stringify(jqXHR));
@@ -524,6 +571,7 @@
 
     @endif
 </script>
-<script type="text/javascript" src="https://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
-<script type="text/javascript" src="https://static.fusioncharts.com/code/latest/fusioncharts.charts.js"></script>
+<script src="{{ URL::asset('js/fusioncharts.js') }}"></script>
+<script src="{{ URL::asset('js/fusioncharts.charts.js') }}"></script>
+
 @endsection

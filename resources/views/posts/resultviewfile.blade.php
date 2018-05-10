@@ -8,7 +8,7 @@
 
     <div id="vismain"></div>
     <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="https://rawgit.com/twitter/SentenTree/master/dist/sententree-standalone.min.js"></script>
+    <script src="{{ URL::asset('js/sententree-standalone.min.js') }}"></script>
 
 		@if(isset($result))
 

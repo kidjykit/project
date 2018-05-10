@@ -1,6 +1,6 @@
 @extends ('layouts.master')
 <script src="js/d3.v4.min.js"></script>
-<script src="https://rawgit.com/twitter/SentenTree/master/dist/sententree-standalone.min.js"></script>
+<script src="{{ URL::asset('js/sententree-standalone.min.js') }}"></script>
 <link href="{{ URL::asset('css/seperator.css') }}" rel="stylesheet">
 @section ('content')
 
