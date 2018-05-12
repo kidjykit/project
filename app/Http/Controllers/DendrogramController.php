@@ -43,7 +43,8 @@ class DendrogramController extends Controller
         $return_data = array();
         $ignoreWord = array();
         $array_files = $_POST['text_data'];
-        $topwordlist = $this->selecttopword($array_files, sizeof($array_files)+1, $ignoreWord);
+        $first_layer_size = sizeof($array_files) <= 4 ? sizeof($array_files) : 4;
+        $topwordlist = $this->selecttopword($array_files, $first_layer_size+1, $ignoreWord);
         $string = "";
         foreach($topwordlist as $index => $list){
             if($index == 0){
@@ -74,6 +75,7 @@ class DendrogramController extends Controller
                 $return_data[] = array('id'=> $local_string);
             }
         }else{
+            $layer += 1;
             $topwordlist = $this->selecttopword($array_files, $amount, $ignore_word);
             foreach($topwordlist as $index => $list){
                 $local_string = $start_string.".".$list['name'];
@@ -84,7 +86,7 @@ class DendrogramController extends Controller
                         $array_files_local[] = $file;
                     }
                 }
-                $this->recursive_getword($array_files_local, $amount, $ignore_word, $local_string, $return_data, $layer++);
+                $this->recursive_getword($array_files_local, $amount, $ignore_word, $local_string, $return_data, $layer);
             }
         }
 
