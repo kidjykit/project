@@ -59,15 +59,15 @@ class DendrogramController extends Controller
                         $array_files_local[] = $file;
                     }
                 }
-                $this->recursive_getword($array_files_local, 3, $ignoreWord, $local_string, $return_data);
+                $this->recursive_getword($array_files_local, 3, $ignoreWord, $local_string, $return_data, 2);
             }
         }
 
         return $return_data;
     }
 
-    private function recursive_getword($array_files, $amount, &$ignore_word, $start_string, &$return_data){
-        if(sizeof($array_files) == 1){
+    private function recursive_getword($array_files, $amount, &$ignore_word, $start_string, &$return_data, $layer = 1){
+        if(sizeof($array_files) == 1 || $layer == 4){
             $topwordlist = $this->selecttopword($array_files, 3, $ignore_word);
             foreach($topwordlist as $list){
                 $local_string = $start_string.".".$list['name'];
@@ -84,7 +84,7 @@ class DendrogramController extends Controller
                         $array_files_local[] = $file;
                     }
                 }
-                $this->recursive_getword($array_files_local, $amount, $ignore_word, $local_string, $return_data);
+                $this->recursive_getword($array_files_local, $amount, $ignore_word, $local_string, $return_data, $layer++);
             }
         }
 
