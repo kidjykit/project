@@ -24,11 +24,15 @@ class BubbleChartController extends Controller
         arsort($results);
 
         $return_data = array();
+        $count=0;
         foreach($results as $key => $value){
+          if($count<=30){
             $return_data[] = array("id"=>$key, "value"=> $value);
+          $count++;
+        }
         }
         //echo implode(' | ', $result);
         return $return_data;
     }
-    
+
 }

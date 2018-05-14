@@ -50,8 +50,9 @@
 		<main class="choose-ur-destiny">
 		  <div class="container">
 		    <section class="variant">
-		      <div align="center">
+		      <div align="center" style="width:100%;height:70%;">
 						<h1>Thai Text Visualization</h1>
+						<br>
 						<div class="tab">
 							<button>Choose Input:</button>
 							<button class="tablinks" onclick="typeinput(event, 'textarea')" id="defaultOpen">Text</button>
@@ -69,9 +70,7 @@
 						  <div class="form-group">
 						  <button type="submit" class="btn btn-primary">Process</button>
 						  </div>
-
 							@include ('layouts.errors')
-
 							</form>
 					</div>
 
@@ -81,7 +80,7 @@
 
 					  <div class="form-group">
 					    <label for="input">Input:</label>
-					      <input type="file" name="textfile[]" id="uploader" multiple="multiple"/>
+					      <input type="file" name="textfile[]" id="uploader" multiple="multiple"/></input>
 					  </div>
 					  <div class="form-group">
 					  <button type="submit" class="btn btn-primary">Process</button>
@@ -91,9 +90,7 @@
 						<br>
 						<br>
 						<br>
-
 						@include ('layouts.errors')
-
 					</form>
 		      </div>
 		    </section>

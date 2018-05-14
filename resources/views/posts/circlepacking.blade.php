@@ -31,7 +31,7 @@
       <section class="variant">
         <div align="center">
           <h1>Input</h1>
-          <textarea id="text_area" name="text_area" class="form-control" style="width:700px;height:700px;"></textarea>
+          <textarea id="text_area" name="text_area" class="form-control" style="width:100%;height:100%;"></textarea>
         </div>
       </section>
       <div class="variant variant--separator">
@@ -57,6 +57,7 @@
         async:false,
         data: {"_token": "{{ csrf_token() }}",text_data: info},
         success: function(response){ // What to do if we succeed
+          console.log(response);
           var svg = d3.select("svg"),
                   diameter = +svg.attr("width"),
                   g = svg.append("g").attr("transform", "translate(2,2)"),

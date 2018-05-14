@@ -1,17 +1,22 @@
 @extends ('layouts.master')
 <link href="{{ URL::asset('css/card.css') }}" rel="stylesheet">
 <script type="text/javascript" src="{!! asset('js/d3.v4.min.js') !!}"></script>
-<script src="https://rawgit.com/twitter/SentenTree/master/dist/sententree-standalone.min.js"></script>
+<script type="text/javascript" src="{!! asset('js/sententree-standalone.min.js') !!}"></script>
+<script type="text/javascript" src="{!! asset('js/fusionchart.js') !!}"></script>
+<script type="text/javascript" src="{!! asset('js/fusioncharts.charts.js') !!}"></script>
 @section ('content')
+<meta charset="utf-8">
 <link href="{{ URL::asset('css/modal_full.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('css/dendrogram.css') }}" rel="stylesheet">
 
-<div id="js-modal" class="modal_full">
+<div id="js-modal" class="modal_full" style="background: #ffffff;">
     <div class="card_modal">
         <div class="card_modal-content" align="center">
-            <span id="js-toggleModal" class="icon-toggleModal"></span>
-            <svg id="svg_area" width="600" height="600" font-family="sans-serif" font-size="10" text-anchor="middle"></svg>
+          <div id="contentapp" style="position: absolute; top:0; left:center;">
+            <svg id="svg_area" width="960" height="1000" font-family="sans-serif" font-size="20" text-anchor="middle"></svg>
             <div id="vismain"  width="750" height="600" font-family="sans-serif" font-size="10" text-anchor="middle" style="position: relative;"></div>
-
+          </div>
+            <span id="js-toggleModal" class="icon-toggleModal"></span>
         </div>
     </div>
 </div>
@@ -72,6 +77,7 @@
 
             </div>
         </div>
+
     </div>
 
 <script>
@@ -110,12 +116,12 @@
                         list : data_list2,
 
                         gridSize: 20,
-                        weightFactor: 8,
+                        weightFactor: 5,
                         fontFamily: 'Finger Paint, cursive, sans-serif',
                         color: '#000000',
                         hover: drawBox,
                         ellipticity: 1,
-                        backgroundColor: '#8eb1e2'
+                        backgroundColor: '#ffffff'
                     }
                     WordCloud(document.getElementById('canvas_cloud'), options);
 
@@ -429,9 +435,44 @@
             async:false,
             data: {"_token": "{{ csrf_token() }}",text_data: x},
             success: function(response){
+              // console.log(response);
               $('#vismain').empty();
+              document.getElementById("svg_area").style.display = "block";
+              var svg = d3.select("svg"),
+                        width = +svg.attr("width"),
+                        height = +svg.attr("height"),
+                        g = svg.append("g").attr("transform", "translate(100,0)");
+                var tree = d3.cluster()
+                        .size([height, width - 250]);
+                var stratify = d3.stratify()
+                        .parentId(function(d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
+                    var root = stratify(response)
+                            .sort(function(a, b) { return (a.height - b.height) || a.id.localeCompare(b.id); });
+                    tree(root);
+                    var link = g.selectAll(".link")
+                            .data(root.descendants().slice(1))
+                            .enter().append("path")
+                            .attr("class", "link")
+                            .attr("d", function(d) {
+                                return "M" + d.y + "," + d.x
+                                        + "C" + (d.parent.y + 100) + "," + d.x
+                                        + " " + (d.parent.y + 100) + "," + d.parent.x
+                                        + " " + d.parent.y + "," + d.parent.x;
+                            });
+                    var node = g.selectAll(".node")
+                            .data(root.descendants())
+                            .enter().append("g")
+                            .attr("class", function(d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
+                            .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+                    node.append("circle")
+                            .attr("r", 2.5);
+                    node.append("text")
+                            .attr("dy", 3)
+                            .attr("x", function(d) { return d.children ? -8 : 8; })
+                            .style("font", "20px times new roman")
+                            .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
+                            .text(function(d) { return d.id.substring(d.id.lastIndexOf(".") + 1); });
 
-              console.log(response);
             },
             error: function(jqXHR, textStatus, errorThrown) { // What to do if we fail
                 console.log(JSON.stringify(jqXHR));
@@ -442,49 +483,56 @@
         document.getElementById('js-modal').classList.toggle('open');
     })
 
+    //columnchart-modal
     document.getElementById('columnchart-modal-file').addEventListener('click', function() {
-        var x = <?php echo json_encode($result); ?>;
+        var x = <?php echo json_encode($tfidf); ?>;
         $.ajax({
             type:'POST',
             url:'/columnchart/processfile',
             async:false,
             data: {"_token": "{{ csrf_token() }}",text_data: x},
             success: function(response){
-
-              var data_list = Array();
-              for(var doc in response){
-                //console.log(response[doc].id,response[doc].value);
-                data_list.push(Array(response[doc].id, response[doc].value));
-              }
-              // console.log(data_list);
               var visnum=0;
               $('#vismain').empty();
               document.getElementById("svg_area").style.display = "none";
-              data_list.forEach(function each(item) {
+              Object.keys(response).forEach(function each(item) {
+                //console.log(response[item].id);
                 var vis = document.createElement("div");
-                vis.id = item[0];
+                vis.id = response[item].id;
                 $('#vismain').append(vis);
                 $('#vismain').append('<p></p>');
-                console.log(Object.keys(item[1]));
+                var datalist = Array();
+                Object.keys(response[item].value).forEach(function each(tdidf) {
+                  if(datalist.length<9){
+                  datalist.push({"label": tdidf, "value": response[item].value[tdidf]});}
+                })
+                // console.log(datalist);
 
+                // [
+                //   {
+                //     "label": Object.keys(item[1]),
+                //     "value": Object.values(item[1])
+                //   },
+                // ]
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
                         type: 'column3d',
-                        renderAt: item[0],
-                        width: '500',
-                        height: '300',
+                        renderAt: response[item].id,
+                        width: '600',
+                        height: '400',
                         dataFormat: 'json',
                         dataSource: {
                             "chart": {
                                 "caption": "Term Frequency Inverse Document Frequency",
-                                "subCaption": item[0],
+                                "subCaption": response[item].id,
                                 "xAxisName": "Words",
                                 "yAxisName": "TFIDF Value",
                                 "paletteColors": "#0075c2,#1aaf5d,#f2c500,#f20000,#00c500",
-                                "valueFontColor": "#ffffff",
-                                "baseFont": "Helvetica Neue,Arial",
-                                "captionFontSize": "14",
-                                "subcaptionFontSize": "14",
+                                "valueFontColor": "#000000",
+                                "baseFont": "Times New Roman",
+                                "baseFontSize": "16",
+                                "captionFontSize": "16",
+                                "subcaptionFontSize": "16",
                                 "subcaptionFontBold": "0",
                                 "placeValuesInside": "1",
                                 "rotateValues": "1",
@@ -499,19 +547,13 @@
                                 "slantLabels": "1"
                             },
 
-                            "data": [
-                              {
-                                "label": Object.keys(item[1]),
-                                "value": Object.values(item[1])
-                              },
-                            ]
+                            "data": datalist
                         }
                     });
                     revenueChart.render();
                 });
 
               })
-              // console.log(response);
             },
             error: function(jqXHR, textStatus, errorThrown) { // What to do if we fail
                 console.log(JSON.stringify(jqXHR));
@@ -524,6 +566,4 @@
 
     @endif
 </script>
-<script type="text/javascript" src="https://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
-<script type="text/javascript" src="https://static.fusioncharts.com/code/latest/fusioncharts.charts.js"></script>
 @endsection
