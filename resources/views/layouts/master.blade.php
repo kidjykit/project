@@ -9,7 +9,7 @@
     <link rel="icon" href="../../favicon.ico">
 
 
-    <title>Process</title>
+    <title>Thai Text Visualization</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ URL::asset('css/bootstrap.min.css') }}" rel="stylesheet">

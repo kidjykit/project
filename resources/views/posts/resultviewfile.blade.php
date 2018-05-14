@@ -3,12 +3,12 @@
 @section ('content')
 	<div class="col-sm-8 blog-main">
 	<h1>Process text</h1>
-		<script type="text/javascript" src="https://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
-		<script type="text/javascript" src="https://static.fusioncharts.com/code/latest/fusioncharts.charts.js"></script>
 
+	<script type="text/javascript" src="{!! asset('js/d3.v4.min.js') !!}"></script>
+	<script type="text/javascript" src="{!! asset('js/sententree-standalone.min.js') !!}"></script>
+	<script type="text/javascript" src="{!! asset('js/fusionchart.js') !!}"></script>
+	<script type="text/javascript" src="{!! asset('js/fusioncharts.charts.js') !!}"></script>
     <div id="vismain"></div>
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="{{ URL::asset('js/sententree-standalone.min.js') }}"></script>
 
 		@if(isset($result))
 
@@ -137,7 +137,7 @@
 
         {{--Create visualize for TFIDF--}}
 			@foreach($tfidf as $TFIDF_Doc_Name => $TFIDF_Word_Name)
-				<li>Document Name = {{$TFIDF_Doc_Name}}</li>
+				<!-- <li>Document Name = {{$TFIDF_Doc_Name}}</li> -->
                 <div id="{{$TFIDF_Doc_Name}}">FusionCharts will render here name {{$TFIDF_Doc_Name}}</div>
 
                 <script>
@@ -145,8 +145,8 @@
                         var revenueChart = new FusionCharts({
                             type: 'column3d',
                             renderAt: '{{$TFIDF_Doc_Name}}',
-                            width: '500',
-                            height: '300',
+                            width: '600',
+                            height: '400',
                             dataFormat: 'json',
                             dataSource: {
                                 "chart": {
@@ -155,10 +155,11 @@
                                     "xAxisName": "Words",
                                     "yAxisName": "TFIDF Value",
                                     "paletteColors": "#0075c2,#1aaf5d,#f2c500,#f20000,#00c500",
-                                    "valueFontColor": "#ffffff",
-                                    "baseFont": "Helvetica Neue,Arial",
-                                    "captionFontSize": "14",
-                                    "subcaptionFontSize": "14",
+                                    "valueFontColor": "#000000",
+                                    "baseFont": "Times New Roman",
+																		"baseFontSize": "16",
+                                    "captionFontSize": "16",
+                                    "subcaptionFontSize": "16",
                                     "subcaptionFontBold": "0",
                                     "placeValuesInside": "1",
                                     "rotateValues": "1",

@@ -68,7 +68,7 @@ class DendrogramController extends Controller
     }
 
     private function recursive_getword($array_files, $amount, &$ignore_word, $start_string, &$return_data, $layer = 1){
-        if(sizeof($array_files) == 1 || $layer == 4){
+        if(sizeof($array_files) == 1 || $layer == 3){
             $topwordlist = $this->selecttopword($array_files, 3, $ignore_word);
             foreach($topwordlist as $list){
                 $local_string = $start_string.".".$list['name'];
@@ -91,7 +91,7 @@ class DendrogramController extends Controller
         }
 
     }
-    
+
     private function recursive_getword_old($array_files, $amount, &$ignoreWord, &$output){
         if(sizeof($array_files) == 1){
             $topwordlist = $this->selecttopword($array_files, 6, $ignoreWord);

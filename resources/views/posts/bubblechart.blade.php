@@ -18,7 +18,7 @@
     <section class="variant">
       <div align="center">
         <h1>Bubble Chart</h1>
-        <svg id="svg_area" width="750" height="750" font-family="sans-serif" font-size="10" text-anchor="middle"></svg>
+        <svg id="svg_area" width="750" height="750" font-family="sans-serif" font-size="30" text-anchor="middle"></svg>
       </div>
     </section>
   </div>

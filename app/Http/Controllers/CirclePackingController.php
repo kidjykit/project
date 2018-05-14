@@ -15,10 +15,10 @@ class CirclePackingController extends Controller
 
         $body = $_POST['text_data'];
         //replace below method by data generator function
-        $return_data = json_decode(file_get_contents("/Users/playbasis/Documents/kidjy/public/data/flare.json"), true);
+        $return_data = json_decode(file_get_contents("data/flare.json"), true);
 
         return $return_data;
     }
 
-    
+
 }

@@ -51,9 +51,52 @@ class ModalController extends Controller
             arsort($result[$i][2]);
         }
         $body = '';
+        $df = $this->df($result);
+        $tfidf = $this->tfidf($result,$df);
 
-        return view('posts.visall', compact('result'));
+        // return view('posts.visall', compact('result'));
+        return view('posts.visall',['result' => $result, 'tfidf' => $tfidf]);
       }
+    }
+
+    private function df($docArray){
+
+        //print_r($docArray);
+        $dfword = array();
+        foreach ($docArray as $docIndex){
+            //echo $docIndex[0].'<br>';
+            foreach ($docIndex[3] as $docValue => $aa){
+                //echo $docValue.' : '.$aa.'<br>';
+                array_push($dfword,$docValue);
+            }
+        }
+        $dfwordcount = array_count_values($dfword);
+        return $dfwordcount;
+    }
+
+    private function tfidf($tf,$idf){
+        $tfidfword = array();
+        foreach ($tf as $tfdoc){
+            //$tfidfword[$tfdoc[0]][] = $tfdoc[0];
+            //echo $tfidfword[0]."<br>";  //File Name.
+            foreach ($tfdoc[2] as $tfword => $tfvalue){
+                foreach ($idf as $idfword => $idfvalue){
+                    if ($tfword==$idfword){
+                        $tfidfvalue = ($tfvalue/count($tfword))*log(count($tf)/$idfvalue,10);
+                        //  $tfdoc[0] >>> File Name.
+                        //  $tfword   >>> Word.
+                        //  $tfidfvalue >>> TFIDF of Word.
+
+//                        $tfidfword[$tfdoc[0]][1] = $tfidfvalue;
+                        //echo "TFIDF OF ".$tfword ." = ".$tfidfvalue."<br>";
+                    }
+                }
+                $tfidfword[$tfdoc[0]][$tfword] = round($tfidfvalue,2);
+            }
+            arsort($tfidfword[$tfdoc[0]]);
+        }
+        return $tfidfword;
+        // dd($tfidfword);
     }
 
 }
