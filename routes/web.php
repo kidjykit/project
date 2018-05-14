@@ -44,6 +44,8 @@ Route::post('/posts/showfile', 'PostsController@segmentfile');
 // router สำหรับทำการส่ง api web service
 Route::post('/api', 'PostsController@segmentapi');
 
+Route::post('/apizip', 'PostsController@apizipfile');
+
 // router สำหรับทำการ resgister
 Auth::routes();
 

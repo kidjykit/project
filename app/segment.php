@@ -22,8 +22,13 @@ class Segment
         include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'unicode.php');
 		}
 
-
-        $file_handle = fopen(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'dict' . DIRECTORY_SEPARATOR . 'dict.txt', "rb");
+        if(!empty($_FILES['dictdoc']['name'])){
+            $filedict = request()->allFiles();
+            $file_handle = fopen($filedict["dictdoc"], "rb");
+        }
+        else{
+            $file_handle = fopen(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'dict' . DIRECTORY_SEPARATOR . 'dict.txt', "rb");
+        }
         while (!feof($file_handle)) {
             $line_of_text = fgets($file_handle);
             $this->_dictionary_array[crc32(trim($line_of_text))] = trim($line_of_text);

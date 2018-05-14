@@ -4,7 +4,7 @@
     <div class="col-sm-8 blog-main">
         <h1>Thai Text Visualization</h1>
 
-        <form method="POST" action="/api" enctype="multipart/form-data">
+        <form method="POST" action="/apizip" enctype="multipart/form-data">
             {{ csrf_field() }}
 
             <div class="form-group">

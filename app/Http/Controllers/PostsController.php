@@ -9,6 +9,7 @@ use App\thcharacter;
 use App\unicode;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Zip;
 
 class PostsController extends Controller
 {
@@ -214,6 +215,83 @@ class PostsController extends Controller
 //        $zipfile->ex
 
             // return json_encode( $result, JSON_UNESCAPED_UNICODE );
+        }
+        else{
+            return 'authen failed';
+        }
+    }
+
+    public function apizipfile(){
+
+
+        //dd($_POST);
+        // check api key จาก Database
+        $users = DB::table('users')->where('apikey', '=', $_POST['apikey'])->count();
+        //$users = 1;
+        //echo $users;
+        if($users == 1) {
+            $time_start = microtime(true);
+
+            if(!empty($_FILES['textword']['name'])){
+                $file = request()->allFiles();
+                $segment = new Segment();
+                $text_to_segment = "";
+                for($i=0; $i<count($_FILES['textword']['name']); $i++) {
+                    $textarray = " ";
+                    $content = " ";
+                    $shortname = $_FILES['textword']['name'][$i];
+                    //echo $shortname."<br>";
+                    $content = $file['textword'][$i]->openFile('r');
+                    foreach ($content as $linenum => $line) {
+                        //echo $line;
+                        $textarray = $textarray . $line;
+                    }
+                    $text_to_segment = trim($textarray);
+                    $result[] = array("Filename"=>$shortname, "Wordsegment"=> array_values($segment->get_segment_array($text_to_segment)));
+                }
+
+                $tmpfilename = array();
+                foreach ($result as $item){
+
+                    $filename = "tmp/segment_".$item["Filename"];
+                    $file = fopen($filename, 'w');
+                    array_push($tmpfilename,$filename);
+                    foreach ($item["Wordsegment"] as $word){
+                        fwrite($file, $word."\n");
+                    }
+                    fclose($file);
+
+                }
+//                print_r($tmpfilename);
+//                $filename = "tmp/".$shortname;
+//                $file = fopen($filename, 'w');
+//
+//                fwrite($file, "5555");
+//
+                $zipname = 'tmp/file.zip';
+
+                $zip = Zip::create($zipname);
+                $zip->add($tmpfilename);
+                $zip->close();
+//
+                if (file_exists($zipname)) {
+                    header('Content-Description: File Transfer');
+                    header('Content-Type: application/octet-stream');
+                    header('Content-Disposition: attachment; filename="'.basename($zipname).'"');
+                    header('Expires: 0');
+                    header('Cache-Control: must-revalidate');
+                    header('Pragma: public');
+                    header('Content-Length: ' . filesize($zipname));
+                    readfile($zipname);
+
+                    unlink($zipname);
+                    exit;
+                }
+            }
+//        $zipfile = new \ZipArchive();
+//        $zipfile->ex
+
+             return "success";
         }
         else{
             return 'authen failed';

@@ -46,8 +46,6 @@
     to {opacity: 1;}
 }
 </style>
-
-		<main class="choose-ur-destiny">
 		  <div class="container">
 		    <section class="variant">
 		      <div align="center" style="width:100%;height:70%;">
@@ -81,7 +79,17 @@
 					  <div class="form-group">
 					    <label for="input">Input:</label>
 					      <input type="file" name="textfile[]" id="uploader" multiple="multiple"/></input>
-					  </div>
+						  <br>
+                          <label for="chkDict">
+                              <input type="checkbox" id="chkDict" />
+                              Do you have dict?
+                          </label>
+                          <div id="dvDict" style="display: none">
+                              Dict:
+                              <input type="file" name="dictdoc" id="dict" multiple="multiple"/></input>
+                          </div>
+
+                      </div>
 					  <div class="form-group">
 					  <button type="submit" class="btn btn-primary">Process</button>
 					  </div>
@@ -94,17 +102,8 @@
 					</form>
 		      </div>
 		    </section>
-				<div class="variant variant--separator">
-		    </div>
-		    <section class="variant">
-		      <div align="center">
-		        <h1>Visualization</h1>
-		        <div id="canvas-container"></div>
-		      </div>
-		    </section>
 		  </div>
 			</div>
-		</main>
 <script>
 function typeinput(evt, input) {
     var i, tabcontent, tablinks;
@@ -120,6 +119,16 @@ function typeinput(evt, input) {
     evt.currentTarget.className += " active";
 }
 document.getElementById("defaultOpen").click();
+
+$(function () {
+    $("#chkDict").click(function () {
+        if ($(this).is(":checked")) {
+            $("#dvDict").show();
+        } else {
+            $("#dvDict").hide();
+        }
+    });
+});
 </script>
 
 @endsection
