@@ -237,4 +237,15 @@ class DendrogramController extends Controller
       return $return_data;
 
     }
+
+    public function wordcloud(){
+
+      $return_data = array();
+      foreach($_POST['text_data'] as $key => $value){
+          $return_data[] = array("id"=>$key, "value"=> $value);
+      }
+      //echo implode(' | ', $result);
+      return $return_data;
+
+    }
 }

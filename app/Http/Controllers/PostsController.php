@@ -50,6 +50,11 @@ class PostsController extends Controller
         return view('posts.testapi');
     }
 
+    public function apidoc(){
+
+        return view('posts.apidoc');
+    }
+
     public function allvis(){
 
         return view('posts.allvis');
@@ -58,24 +63,6 @@ class PostsController extends Controller
     public function modal(){
 
         return view('posts.modal');
-    }
-
-
-    public function store(){
-
-    	// $post = new Post;
-    	// $post->title = request('title');
-    	// $post->body = request('body');
-    	// $post->save();
-
-    	$this->validate(request(), [
-    		'title' => 'required',
-    		'body' => 'required'
-    		]);
-
-    	Post::create(request(['title', 'body']));
-
-    	return redirect('/');
     }
 
     public function segment(request $body){
@@ -231,8 +218,8 @@ class PostsController extends Controller
         //echo $users;
         if($users == 1) {
             $time_start = microtime(true);
-
-            if(!empty($_FILES['textword']['name'])){
+            // print_r($_FILES['textword']);
+            if($_FILES['textword']['size'][0] > 0){
                 $file = request()->allFiles();
                 $segment = new Segment();
                 $text_to_segment = "";
@@ -287,11 +274,15 @@ class PostsController extends Controller
                     unlink($zipname);
                     exit;
                 }
+
+                return "success";
+            }
+            else {
+              return "[]";
             }
 //        $zipfile = new \ZipArchive();
 //        $zipfile->ex
 
-             return "success";
         }
         else{
             return 'authen failed';

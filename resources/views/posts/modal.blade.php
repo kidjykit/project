@@ -64,7 +64,17 @@
 						  <div class="form-group">
 						    <label for="input">Input:</label>
 						    <textarea id="textarea" name="textarea" class="form-control" style="width:440px;height:200px;"></textarea>
-						  </div>
+								<br>
+	                          <label for="chkDict">
+	                              <input type="checkbox" id="chkDict" />
+	                              Do you have more dictionary?
+	                          </label>
+	                          <div id="dvDict" style="display: none">
+	                              Dict:
+	                              <input type="file" name="dictdoc" id="dict" multiple="multiple"/></input>
+	                          </div>
+
+							</div>
 						  <div class="form-group">
 						  <button type="submit" class="btn btn-primary">Process</button>
 						  </div>
@@ -82,7 +92,7 @@
 						  <br>
                           <label for="chkDict">
                               <input type="checkbox" id="chkDict" />
-                              Do you have dict?
+                              Do you have more dictionary?
                           </label>
                           <div id="dvDict" style="display: none">
                               Dict:

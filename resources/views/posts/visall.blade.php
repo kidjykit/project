@@ -31,19 +31,19 @@
                 <div class="card-container">
                     <div class="card" id="wordcloud-modal" class="btn btn-info btn-lg">
                         <div class="side"><img src="{{asset('image/wordcloud.jpg')}}" alt="Word Cloud"></div>
-                        <div class="side back">Word Cloud</div>
+                        <div class="side back">Word Cloud(Word Frequency)</div>
                     </div>
                 </div>
                 <div class="card-container">
                     <div class="card" id="sententree-modal" class="btn btn-info btn-lg">
                         <div class="side"><img src="{{asset('image/SentenTree.png')}}" alt="Sentence Tree"></div>
-                        <div class="side back">Sentence Tree</div>
+                        <div class="side back">Sentence Tree(Word Frequency with two word)</div>
                     </div>
                 </div>
                 <div class="card-container">
                     <div class="card" id="bubblechart-modal" class="btn btn-info btn-lg">
                         <div class="side"><img src="{{asset('image/bubble_chart.png')}}" alt="Bubble Chart"></div>
-                        <div class="side back">Bubble Chart</div>
+                        <div class="side back">Bubble Chart(Word Frequency)</div>
                     </div>
                 </div>
                 @endif
@@ -55,21 +55,34 @@
                 <div class="card-container">
                   <div class="card" id="sententree-modal-file" class="btn btn-info btn-lg">
                       <div class="side"><img src="{{asset('image/SentenTree.png')}}" alt="Sentence Tree"></div>
-                      <div class="side back">Sentence Tree</div>
+                      <div class="side back">Sentence Tree<br>(Word Frequency)</div>
                   </div>
                 </div>
 
                 <div class="card-container">
                       <div class="card" id="columnchart-modal-file" class="btn btn-info btn-lg">
                         <div class="side"><img src="{{asset('image/column_chart.jpg')}}" alt="Column Chart"></div>
-                        <div class="side back">Column Chart</div>
+                        <div class="side back">
+                          <pre>Column Chart</pre>
+                          <pre>(TFIDF)</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-container">
+                      <div class="card" id="wordcloud-modal-tfidf" class="btn btn-info btn-lg">
+                        <div class="side"><img src="{{asset('image/wordcloud.jpg')}}" alt="Word Cloud"></div>
+                        <div class="side back">
+                          <pre>Word Cloud</pre>
+                          <pre>(TFIDF)</pre>
+                        </div>
                     </div>
                 </div>
 
                 <div class="card-container">
                     <div class="card" id="dendrogram-modal-file" class="btn btn-info btn-lg">
                         <div class="side"><img src="{{asset('image/dendrogram.png')}}" alt="Dendrogram"></div>
-                        <div class="side back">Dendrogram</div>
+                        <div class="side back">Dendrogram(Word Frequency with filter document)</div>
                     </div>
                 </div>
         @endif
@@ -328,7 +341,7 @@
     @endif
 
     @if (!empty($result))
-    //sententree-modal
+    //sententree-modal-file
     document.getElementById('sententree-modal-file').addEventListener('click', function() {
         var x = <?php echo json_encode($result); ?>;
         $.ajax({
@@ -344,10 +357,13 @@
                 document.getElementById("svg_area").style.display = "none";
                 // console.log(data_list2);
                 data_list2.forEach(function each(item) {
+                    var hname = document.createElement("h1");
                     var vis = document.createElement("div");
                     vis.id = 'vis'+(++visnum);
+                    hname.appendChild(document.createTextNode("Sentence Tree of "+item[0]));
+                    $('#vismain').append(hname);
                     $('#vismain').append(vis);
-                    $('#vismain').append('<p></p>');
+                    $('#vismain').append('<hr style="border-width: 5px;"><p></p>');
                     //console.log(vis.id)
                     i = item[1];
                     a = item[1];
@@ -554,6 +570,97 @@
                 });
 
               })
+            },
+            error: function(jqXHR, textStatus, errorThrown) { // What to do if we fail
+                console.log(JSON.stringify(jqXHR));
+                console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+            }
+        });
+        this.classList.toggle('open');
+        document.getElementById('js-modal').classList.toggle('open');
+    })
+
+    //wordcloud-modal-tfidf
+    document.getElementById('wordcloud-modal-tfidf').addEventListener('click', function() {
+        var x = <?php echo json_encode($tfidf); ?>;
+        $.ajax({
+            type:'POST',
+            url:'/wordcloud/processfile',
+            async:false,
+            data: {"_token": "{{ csrf_token() }}",text_data: x},
+            success: function(response){ // What to do if we succeed
+
+
+              var visnum=0;
+              $('#vismain').empty();
+              document.getElementById("svg_area").style.display = "none";
+              Object.keys(response).forEach(function each(item) {
+                //console.log(response[item].id);
+                var hname = document.createElement("h1");
+                var viscanvas = document.createElement("canvas");
+                var vistooltip = document.createElement("div");
+                hname.appendChild(document.createTextNode("TFIDF of "+response[item].id));
+                viscanvas.id = response[item].id;
+                viscanvas.class = "canvas";
+                viscanvas.width = "900";
+                viscanvas.height = "600";
+                vistooltip.id = response[item].id;
+                vistooltip.position = "relative";
+                vistooltip.hidden = true;
+                $('#vismain').append(hname);
+                $('#vismain').append(viscanvas);
+                $('#vismain').append(vistooltip);
+                $('#vismain').append('<p></p>');
+                var datalist = Array();
+                Object.keys(response[item].value).forEach(function each(tdidf) {
+                  if(datalist.length<50){
+
+                  datalist.push(Array(tdidf, response[item].value[tdidf]));
+                  }
+                })
+// console.log(datalist);
+                $.getScript("{!! asset('js/wordcloud2.js') !!}", function () {
+                    var options =
+                    {
+                        list : datalist,
+
+                        gridSize: 20,
+                        weightFactor: 3000,
+                        fontFamily: 'Finger Paint, cursive, sans-serif',
+                        color: '#000000',
+                        hover: drawBox,
+                        ellipticity: 1,
+                        backgroundColor: '#ccffe6'
+                    }
+                    WordCloud(viscanvas.id, options);
+
+                    var $box = vistooltip.id;
+                    function drawBox(item, dimension) {
+
+                        if (!dimension) {
+                            $box.hidden= true;
+
+                            return;
+                        }
+
+                        $box.hidden= false;
+                        $box.style.left = dimension.x  + 'px';
+                        $box.style.top = dimension.y + 'px';
+                        $box.style.width = dimension.w + 'px';
+                        $box.style.height = dimension.h + 'px';
+                        $box.innerHTML = "<span class='tooltiptext'>" + item[0] + ': ' + item[1] + "</span>";
+                    }
+                });
+              })
+                // $('#vismain').empty();
+                //
+                // document.getElementById("svg_area").style.display = "none";
+                // //$('#canvas-container').html($(this).val());
+                // $('#vismain').append('<canvas id="canvas_cloud" class="canvas" width="900" height="600"></canvas>');
+                // $('#vismain').append('<div id="box" class="tooltipme" position="relative" hidden ></div>');
+
+
+
             },
             error: function(jqXHR, textStatus, errorThrown) { // What to do if we fail
                 console.log(JSON.stringify(jqXHR));

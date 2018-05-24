@@ -78,11 +78,11 @@ class ModalController extends Controller
         $tfidfword = array();
         foreach ($tf as $tfdoc){
             //$tfidfword[$tfdoc[0]][] = $tfdoc[0];
-            //echo $tfidfword[0]."<br>";  //File Name.
+            $allword_eachdoc = count($tfdoc[1]);
             foreach ($tfdoc[2] as $tfword => $tfvalue){
                 foreach ($idf as $idfword => $idfvalue){
                     if ($tfword==$idfword){
-                        $tfidfvalue = ($tfvalue/count($tfword))*log(count($tf)/$idfvalue,10);
+                        $tfidfvalue = ($tfvalue/$allword_eachdoc)*log(count($tf)/$idfvalue,10);
                         //  $tfdoc[0] >>> File Name.
                         //  $tfword   >>> Word.
                         //  $tfidfvalue >>> TFIDF of Word.

@@ -10,29 +10,34 @@ class Segment
     private $_thcharacter_obj;
     private $_unicode_obj;
     private $_segmented_result = array();
-    
-    
-    
+
+
+
     function __construct() {
         if (!class_exists('Thchracter')) {
         include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'thcharacter.php');
 		}
-		
+
 		if (!class_exists('Unicode')) {
         include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'unicode.php');
 		}
 
         if(!empty($_FILES['dictdoc']['name'])){
             $filedict = request()->allFiles();
-            $file_handle = fopen($filedict["dictdoc"], "rb");
+            $file_handle_option = fopen($filedict["dictdoc"], "rb");
+            while (!feof($file_handle_option)) {
+                $line_of_text_option = fgets($file_handle_option);
+                $this->_dictionary_array[crc32(trim($line_of_text_option))] = trim($line_of_text_option);
+            }
         }
-        else{
-            $file_handle = fopen(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'dict' . DIRECTORY_SEPARATOR . 'dict.txt', "rb");
-        }
+
+        $file_handle = fopen(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'dict' . DIRECTORY_SEPARATOR . 'dict.txt', "rb");
         while (!feof($file_handle)) {
             $line_of_text = fgets($file_handle);
             $this->_dictionary_array[crc32(trim($line_of_text))] = trim($line_of_text);
         }
+      //  print_r($this->_dictionary_array);
+
         fclose($file_handle);
 
         $file_stopword = fopen(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'dict' . DIRECTORY_SEPARATOR . 'stopword.txt', "rb");
@@ -130,7 +135,24 @@ class Segment
         }
         $this->_segmented_result = array_diff($tmp_result, $this->_stopword_array);
 
-        return $this->_segmented_result;
+        $this->_segmented_result_nonumber = array();
+
+        //filter number...
+        foreach ($this->_segmented_result as $result_row) {
+          // echo $result_row.' ';
+          if(is_numeric($result_row)){
+          //  echo "unset ".$result_row;
+          //  unset($this->_segmented_result[$result_row]);
+          }
+          else {
+            // code...
+            $this->_segmented_result_nonumber[] = $result_row;
+          }
+
+        }
+
+
+        return $this->_segmented_result_nonumber;
     }
 
     private function _segment_by_dictionary($input_array) {
@@ -178,7 +200,7 @@ class Segment
 
                     //echo $to_mark;
                 } else {
-                    
+
                 }
                 //echo '-------------------<br/>';
                 $dup_array = array();
@@ -244,7 +266,7 @@ class Segment
 
                     //echo $to_mark;
                 } else {
-                    
+
                 }
                 //echo '-------------------<br/>';
                 $dup_array = array();
