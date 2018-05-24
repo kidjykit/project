@@ -3,10 +3,6 @@
     fill: #999;
   }
 
-  .node text {
-    font: 10px sans-serif;
-  }
-
   .node--internal circle {
     fill: #555;
   }
