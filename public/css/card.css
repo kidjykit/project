@@ -31,8 +31,9 @@ body {
 .card .back {
   background: #eaeaed;
   color: #0087cc;
-  line-height: 300px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   transform: rotateY(180deg);
 }
 
@@ -40,5 +41,3 @@ img {
   height: 100%;
   width: 100%;
 }
-
-
