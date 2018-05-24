@@ -4,17 +4,16 @@
 <script type="text/javascript" src="{!! asset('js/sententree-standalone.min.js') !!}"></script>
 <script type="text/javascript" src="{!! asset('js/fusionchart.js') !!}"></script>
 <script type="text/javascript" src="{!! asset('js/fusioncharts.charts.js') !!}"></script>
-@section ('content')
-<meta charset="utf-8">
 <link href="{{ URL::asset('css/modal_full.css') }}" rel="stylesheet">
 <link href="{{ URL::asset('css/dendrogram.css') }}" rel="stylesheet">
+@section ('content')
 
-<div id="js-modal" class="modal_full" style="background: #ffffff;">
+<div id="js-modal" class="modal_full">
     <div class="card_modal">
         <div class="card_modal-content" align="center">
           <div id="contentapp" style="position: absolute; top:0; left:center;">
             <svg id="svg_area" width="960" height="1000" font-family="sans-serif" font-size="20" text-anchor="middle"></svg>
-            <div id="vismain"  width="750" height="600" font-family="sans-serif" font-size="10" text-anchor="middle" style="position: relative;"></div>
+            <div id="vismain"  width="750" height="600" font-family="sans-serif" font-size="10" style="position: relative;"></div>
           </div>
             <span id="js-toggleModal" class="icon-toggleModal"></span>
         </div>
@@ -31,27 +30,25 @@
                 <div class="card-container">
                     <div class="card" id="wordcloud-modal" class="btn btn-info btn-lg">
                         <div class="side"><img src="{{asset('image/wordcloud.jpg')}}" alt="Word Cloud"></div>
-                        <div class="side back">Word Cloud(Word Frequency)</div>
+                        <div class="side back">Word Cloud<br>(Word Frequency)</div>
                     </div>
                 </div>
                 <div class="card-container">
                     <div class="card" id="sententree-modal" class="btn btn-info btn-lg">
                         <div class="side"><img src="{{asset('image/SentenTree.png')}}" alt="Sentence Tree"></div>
-                        <div class="side back">Sentence Tree(Word Frequency with two word)</div>
+                        <div class="side back">Sentence Tree<br>(Word Frequency with two word)</div>
                     </div>
                 </div>
                 <div class="card-container">
                     <div class="card" id="bubblechart-modal" class="btn btn-info btn-lg">
                         <div class="side"><img src="{{asset('image/bubble_chart.png')}}" alt="Bubble Chart"></div>
-                        <div class="side back">Bubble Chart(Word Frequency)</div>
+                        <div class="side back">Bubble Chart<br>(Word Frequency)</div>
                     </div>
                 </div>
                 @endif
-
             @if (!empty($result))
 
                 <?php $body = '';?>
-
                 <div class="card-container">
                   <div class="card" id="sententree-modal-file" class="btn btn-info btn-lg">
                       <div class="side"><img src="{{asset('image/SentenTree.png')}}" alt="Sentence Tree"></div>
@@ -62,35 +59,26 @@
                 <div class="card-container">
                       <div class="card" id="columnchart-modal-file" class="btn btn-info btn-lg">
                         <div class="side"><img src="{{asset('image/column_chart.jpg')}}" alt="Column Chart"></div>
-                        <div class="side back">
-                          <pre>Column Chart</pre>
-                          <pre>(TFIDF)</pre>
-                        </div>
+                        <div class="side back">Column Chart<br>(TFIDF)</div>
                     </div>
                 </div>
 
                 <div class="card-container">
                       <div class="card" id="wordcloud-modal-tfidf" class="btn btn-info btn-lg">
                         <div class="side"><img src="{{asset('image/wordcloud.jpg')}}" alt="Word Cloud"></div>
-                        <div class="side back">
-                          <pre>Word Cloud</pre>
-                          <pre>(TFIDF)</pre>
-                        </div>
+                        <div class="side back">Word Cloud<br>(TFIDF)</div>
                     </div>
                 </div>
 
                 <div class="card-container">
                     <div class="card" id="dendrogram-modal-file" class="btn btn-info btn-lg">
                         <div class="side"><img src="{{asset('image/dendrogram.png')}}" alt="Dendrogram"></div>
-                        <div class="side back">Dendrogram(Word Frequency with filter document)</div>
+                        <div class="side back">Dendrogram<br>(Word Frequency with filter document)</div>
                     </div>
                 </div>
         @endif
-
-
-            </div>
         </div>
-
+      </div>
     </div>
 
 <script>
@@ -140,14 +128,10 @@
 
                     var $box = document.getElementById('box');
                     function drawBox(item, dimension) {
-
                         if (!dimension) {
                             $box.hidden= true;
-
                             return;
                         }
-
-
                         $box.hidden= false;
                         $box.style.left = dimension.x  + 'px';
                         $box.style.top = dimension.y + 'px';
@@ -156,7 +140,6 @@
                         $box.innerHTML = "<span class='tooltiptext'>" + item[0] + ': ' + item[1] + "</span>";
                     }
                 });
-
             },
             error: function(jqXHR, textStatus, errorThrown) { // What to do if we fail
                 console.log(JSON.stringify(jqXHR));
@@ -276,6 +259,7 @@
             success: function(response){ // What to do if we succeed
                 $('#vismain').empty();
                 document.getElementById("svg_area").style.display = "block";
+                document.getElementById("svg_area").style.fontSize = "xx-large";
                 var svg = d3.select("svg"),
                         width = +svg.attr("width"),
                         height = +svg.attr("height");
@@ -618,12 +602,10 @@
                   datalist.push(Array(tdidf, response[item].value[tdidf]));
                   }
                 })
-// console.log(datalist);
                 $.getScript("{!! asset('js/wordcloud2.js') !!}", function () {
                     var options =
                     {
                         list : datalist,
-
                         gridSize: 20,
                         weightFactor: 3000,
                         fontFamily: 'Finger Paint, cursive, sans-serif',
@@ -636,13 +618,10 @@
 
                     var $box = vistooltip.id;
                     function drawBox(item, dimension) {
-
                         if (!dimension) {
                             $box.hidden= true;
-
                             return;
                         }
-
                         $box.hidden= false;
                         $box.style.left = dimension.x  + 'px';
                         $box.style.top = dimension.y + 'px';
@@ -652,15 +631,6 @@
                     }
                 });
               })
-                // $('#vismain').empty();
-                //
-                // document.getElementById("svg_area").style.display = "none";
-                // //$('#canvas-container').html($(this).val());
-                // $('#vismain').append('<canvas id="canvas_cloud" class="canvas" width="900" height="600"></canvas>');
-                // $('#vismain').append('<div id="box" class="tooltipme" position="relative" hidden ></div>');
-
-
-
             },
             error: function(jqXHR, textStatus, errorThrown) { // What to do if we fail
                 console.log(JSON.stringify(jqXHR));
