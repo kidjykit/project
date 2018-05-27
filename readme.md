@@ -16,6 +16,7 @@ URI : http://206.189.80.141/api
 |----------|----------|----------|
 | apikey      | Key      | String      |
 | textword[]      | Text Files      | File Array      |
+| dictdoc      | Text Files      | File      |
 
 ## Return value
 
@@ -32,10 +33,6 @@ Example :
 "Process_time" : "0.01 ms"
 
 }]
-
-
-
-
 
 
 
