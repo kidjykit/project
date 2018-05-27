@@ -13,19 +13,11 @@ class BubbleChartController extends Controller
 
     public function process(){
 
-        $body = $_POST['text_data'];
-        $text_to_segment = trim($body);
-        //echo $text_to_segment;
-        $segment = new Segment();
-        $result_array = $segment->get_segment_array($text_to_segment);
-        $results = array_count_values($result_array);
-
-        // sort จำนวนคำที่ค้นเจอ
-        arsort($results);
-
+        $body = array_count_values($_POST['text_data']);
+        arsort($body);
         $return_data = array();
         $count=0;
-        foreach($results as $key => $value){
+        foreach($body as $key => $value){
           if($count<=30){
             $return_data[] = array("id"=>$key, "value"=> $value);
           $count++;

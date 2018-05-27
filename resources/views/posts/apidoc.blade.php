@@ -61,6 +61,17 @@ pre {
 			File Array
 		</td>
 	</tr>
+  <tr>
+		<td>
+			dictdoc
+		</td>
+		<td>
+			Text Files
+		</td>
+		<td>
+			File
+		</td>
+	</tr>
 </table>
 <p></p>
 <hr>

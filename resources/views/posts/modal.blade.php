@@ -58,18 +58,18 @@
 						</div>
 
 						<div id="textarea" class="tabcontent">
-							<form method="POST" action="/modal/vistext">
+							<form method="POST" action="/modal/vistext" enctype="multipart/form-data">
 								{{ csrf_field() }}
 
 						  <div class="form-group">
 						    <label for="input">Input:</label>
 						    <textarea id="textarea" name="textarea" class="form-control" style="width:440px;height:200px;"></textarea>
 								<br>
-	                          <label for="chkDict">
-	                              <input type="checkbox" id="chkDict" />
+	                          <label for="chkDict1">
+	                              <input type="checkbox" id="chkDict1" />
 	                              Do you have more dictionary?
 	                          </label>
-	                          <div id="dvDict" style="display: none">
+	                          <div id="dvDict1" style="display: none">
 	                              Dict:
 	                              <input type="file" name="dictdoc" id="dict" multiple="multiple"/></input>
 	                          </div>
@@ -90,11 +90,11 @@
 					    <label for="input">Input:</label>
 					      <input type="file" name="textfile[]" id="uploader" multiple="multiple"/></input>
 						  <br>
-                          <label for="chkDict">
-                              <input type="checkbox" id="chkDict" />
+                          <label for="chkDict2">
+                              <input type="checkbox" id="chkDict2" />
                               Do you have more dictionary?
                           </label>
-                          <div id="dvDict" style="display: none">
+                          <div id="dvDict2" style="display: none">
                               Dict:
                               <input type="file" name="dictdoc" id="dict" multiple="multiple"/></input>
                           </div>
@@ -131,11 +131,18 @@ function typeinput(evt, input) {
 document.getElementById("defaultOpen").click();
 
 $(function () {
-    $("#chkDict").click(function () {
+    $("#chkDict1").click(function () {
         if ($(this).is(":checked")) {
-            $("#dvDict").show();
+            $("#dvDict1").show();
         } else {
-            $("#dvDict").hide();
+            $("#dvDict1").hide();
+        }
+    });
+		$("#chkDict2").click(function () {
+        if ($(this).is(":checked")) {
+            $("#dvDict2").show();
+        } else {
+            $("#dvDict2").hide();
         }
     });
 });

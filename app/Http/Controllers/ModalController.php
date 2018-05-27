@@ -19,7 +19,12 @@ class ModalController extends Controller
           'textarea' => 'required'
       ]);
 
-      $body = $_POST['textarea'];
+      $inputtext = $_POST['textarea'];
+      $text_to_segment = trim($inputtext);
+      //echo $text_to_segment;
+      $segment = new Segment();
+      $body = $segment->get_segment_array($text_to_segment);
+
       return view('posts.visall', compact('body'));
 
     }
