@@ -500,7 +500,7 @@
                 var vis = document.createElement("div");
                 vis.id = response[item].id;
                 $('#vismain').append(vis);
-                $('#vismain').append('<p></p>');
+                $('#vismain').append('<hr style="border-width: 5px;"><p></p>');
                 var datalist = Array();
                 Object.keys(response[item].value).forEach(function each(tdidf) {
                   if(datalist.length<9){
@@ -594,7 +594,7 @@
                 $('#vismain').append(hname);
                 $('#vismain').append(viscanvas);
                 $('#vismain').append(vistooltip);
-                $('#vismain').append('<p></p>');
+                $('#vismain').append('<hr style="border-width: 5px;"><p></p>');
                 var datalist = Array();
                 Object.keys(response[item].value).forEach(function each(tdidf) {
                   if(datalist.length<50){
